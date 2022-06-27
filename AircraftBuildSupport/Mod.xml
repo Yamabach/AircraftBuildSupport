@@ -1,0 +1,212 @@
+<Mod>
+	<!-- Mod manifest file.
+		 YOu should at the very least replace the values marked with FIX.
+		 
+		 See the documentation for further information on any of these elements.
+	-->
+
+	<!-- General information about the mod. -->
+	<Name>Aircraft Build Support</Name>
+	<Author>Yamabach</Author> <!-- FIX: Insert your name here. -->
+	<!-- Major.Minor.Build -->
+	<Version>1.13.1</Version>
+	
+	<Description>
+Add some useful features for aircraft lovers <!-- FIX: Insert a short description here. -->
+	</Description>
+	
+	<!-- Square icon of the mod. Texture defined in the Resources section.
+		 This is displayed in the mod list and, if WorkshopThumbnail is not set, used as thumbnail when uploaded to the Steam workshop. -->
+	<Icon name="icon" />
+	
+	<!-- Texture resource used as thumbnail when uploading the mod to the workshop.
+		 If this is not present, the Icon texture is used instead.
+		 This can be set to have different icons in the mod list and the workshop. -->
+	<!-- <WorkshopThumbnail name="thumbnail" /> -->
+	
+	<!-- Enables reloading of various values at runtime. This is normally triggered automatically when a file is changed,
+		 you can also trigger it by pressing Ctrl+H.
+		 Reloadable values include:
+			- Colliders
+			- Adding Points
+			- FireInteractions
+			- Mesh Transforms
+		 
+		 Also gives some extra information about warnings and errors parsing the XML files, at the cost
+		 of a slight increase in loading time for mods with many XML elements.
+		 
+		 It is generally recommended to turn this on while developing the mod, but keep it off for any releases.
+		 Important: You cannot upload mods to Steam or WeGame while Debug is turned on.
+		 
+		 Note: This value is independent of the Debug values for specific Blocks and Entities.-->
+	<Debug>false</Debug>
+	
+	<!-- Whether the mod can be used in MP or only in SP.
+		 SP-only mods are easier to write but obviously more limited in their uses.
+		 SP-only mods will be loaded when the first singleplayer level is loaded.
+		 Once an SP-only mod was loaded, it is impossible to start a multiplayer game until the game is restarted since the mod can't be unloaded again. -->
+	<MultiplayerCompatible>true</MultiplayerCompatible>
+	
+	<!-- Include this to make the mod be loaded in the title screen.
+		 Normally mods will only be loaded when the actual game is entered
+		 (i.e. when starting/joining an MP session or entering an SP level).
+		 
+		 Only use this if there is a good reason for it!
+		 Mods that are immediately loaded when starting the game are significantly
+		 less user-friendly, whenever the mod is disabled the game needs to be restarted.-->
+	<!-- <LoadInTitleScreen /> -->
+	
+	<!-- Note on IDs -->
+	<!-- Many elements of your mod need to have an ID assigned that will identify them.
+		 This includes blocks, entities, triggers and events.
+		 IDs are always integers (except the mod ID, that is an unsigned long).
+		 
+		 Except for the ID of the mod itself, they are always local to the mod.
+		 That means you do not need to worry about any conflicts with other mods, because
+		 the mod loader identifies these elements using the mod ID and the element ID.
+		 
+		 You should not change IDs after you have published your mod in any way.
+		 If you do, saved machines and levels will not load the elements correctly anymore.
+		 
+		 Do not rely on the game using the IDs you specified internally in fields such as in BlockBehaviour.BlockID.
+		 In many cases (e.g. blocks and entities) the game will identify your elements by another ID computed based
+		 on the mod and element IDs.
+	-->
+	
+	<!-- Any assemblies that contain code for your mod.
+		 If an assembly listed here contains an implementation of the Mod class,
+		 its OnLoad method will be called.
+		 BlockScripts for your blocks (if any) will be searched for in these assemblies.
+		 The path attribute is relative to the location of this file. -->
+	<Assemblies>
+		<Assembly path="ABS.dll" />
+	</Assemblies>
+	
+	<!-- Any blocks your mod adds to the game.
+		 The path attribute is relative to the location of this file. -->
+	<Blocks>
+		<Block path="ReversedSingleWoodenBlock.xml" />
+		<Block path="ReversedDoubleWoodenBlock.xml" />
+		<Block path="ReversedLog.xml" />
+		<Block path="ReversedWoodenPole.xml" />
+		<Block path="ReversedMediumCogPowered.xml" />
+		<Block path="ReversedMediumCogUnpowered.xml" />
+		<Block path="ReversedHinge.xml" />
+		<Block path="ReversedSteeringHinge.xml" />
+		<Block path="ReversedSwivel.xml" />
+		<Block path="ReversedBallJoint.xml" />
+		<Block path="ReversedGrabber.xml" />
+	</Blocks>
+	
+	<!-- Any entities (level objects) your mod adds to the game.
+		 The path attribute is relative to the location of this file. -->
+	<Entities>
+    <Entity path="PngProjector.xml" />
+	</Entities>
+	
+	<!-- Any logic trigger types your mod adds to the game. -->
+	<!-- See the ModTriggers class for info on how to activate your triggers. -->
+	<Triggers>
+		
+	</Triggers>
+	
+	<!-- Any logic event types your mod adds to the game. -->
+	<!-- See the ModEvents class for info on how to handle your events being activated. -->
+	<Events>
+		
+	</Events>
+	
+	<!-- Access these keys using the ModKeys class. -->
+	<Keys>
+    
+	</Keys>
+	
+	<!-- The mod loader will automatically make all resources listed here available
+		 to your mod via the ModResource class.
+		 The path attribute is relative to the Resources/ directory.
+		 You also need to list resources used in your Blocks and Entities.
+		 Available resource types are Mesh, Texture, AudioClip, and AssetBundle. -->
+	<Resources>
+    <!--サムネ-->
+    <Texture name="icon" path="Thumbnail.png"/>
+    <Texture name="PngProjectorTex" path="PngProjectorEntity\PngProjectorThumbnail.png"/>
+    
+    <!--リバースブロック-->
+		<Mesh name="grabberMesh" path="VanillaBlocks\Grabber\grabber.obj"/>
+		<Texture name="grabberTex" path="VanillaBlocks\Grabber\grabbertex_png.png"/>
+    
+		<Mesh name="hingeMesh" path="VanillaBlocks\Hinge\hinge.obj"/>
+		<Texture name="hingeTex" path="VanillaBlocks\Hinge\HingeJoint.png"/>
+    
+		<Mesh name="propellerMesh" path="VanillaBlocks\Propeller\propeller.obj"/>
+		<Texture name="propellerTex" path="VanillaBlocks\Propeller\propellertex_png.png"/>
+
+    <Mesh name="logMesh" path="VanillaBlocks\Log\log.obj"/>
+    <Texture name="logTex" path="VanillaBlocks\Log\logtex_png.png"/>
+
+    <Mesh name="sHingeMesh" path="VanillaBlocks\SteeringHinge\steeringhinge.obj"/>
+    <Texture name="sHingeTex" path="VanillaBlocks\SteeringHinge\steeringhingetex_png.png"/>
+    
+    <Mesh name="dWoodenBlockMesh" path="VanillaBlocks\DoubleWoodenBlock\doublewood.obj"/>
+    <Texture name="dWoodenBlockTex" path="VanillaBlocks\DoubleWoodenBlock\woodmetal_png.png"/>
+    
+    <Mesh name="sWoodenBlockMesh" path="VanillaBlocks\SingleWoodenBlock\singlewood.obj"/>
+    <Texture name="sWoodenBlockTex" path="VanillaBlocks\SingleWoodenBlock\woodmetal_png.png"/>
+
+    <Mesh name="woodenPoleMesh" path="VanillaBlocks\WoodenPole\woodenpole.obj"/>
+    <Texture name="woodenPoleTex" path="VanillaBlocks\WoodenPole\woodenpoletex_png.png"/>
+    
+    <Mesh name="swivelMesh" path="VanillaBlocks\Swivel\swivel.obj"/>
+    <Texture name="swivelTex" path="VanillaBlocks\Swivel\swiveltex_png.png"/>
+    
+    <Mesh name="bJointMesh" path="VanillaBlocks\BallJoint\balljoint.obj"/>
+    <Texture name="bJointTex" path="VanillaBlocks\BallJoint\balljointtex_png.png"/>
+    
+    <Mesh name="pCogMesh" path="VanillaBlocks\CogMediumPowered\cogpowered.obj"/>
+    <Texture name="pCogTex" path="VanillaBlocks\CogMediumPowered\cogpoweredtex_png.png"/>
+    
+    <Mesh name="uCogMesh" path="VanillaBlocks\CogMediumUnpowered\cogunpowered.obj"/>
+    <Texture name="uCogTex" path="VanillaBlocks\CogMediumUnpowered\cogunpoweredtex_png.png"/>
+    
+    <!--Png投影機-->
+    <Mesh name="PngProjectorEntityMesh" path="PngProjectorEntity\PngProjectorEntityMesh.obj"/>
+    <Texture name="PngProjectorEntityTex" path="PngProjectorEntity\PngProjectorEntityTex.png"/>
+    
+    <!--GUI-->
+    <Texture name="ui_arrow-disabled-down.png" path="UI\arrow-disabled-down.png"/>
+    <Texture name="ui_arrow-disabled-right.png" path="UI\arrow-disabled-right.png"/>
+    <Texture name="ui_arrow-hover-down.png" path="UI\arrow-hover-down.png"/>
+    <Texture name="ui_arrow-hover-right.png" path="UI\arrow-hover-right.png"/>
+    <Texture name="ui_arrow-normal-down.png" path="UI\arrow-normal-down.png"/>
+    <Texture name="ui_arrow-normal-right.png" path="UI\arrow-normal-right.png"/>
+    <Texture name="ui_background-44px.png" path="UI\background-44px.png"/>
+    <Texture name="ui_background-dark.png" path="UI\background-dark.png"/>
+    <Texture name="ui_blue-dark.png" path="UI\blue-dark.png"/>
+    <Texture name="ui_blue-light.png" path="UI\blue-light.png"/>
+    <Texture name="ui_blue-normal.png" path="UI\blue-normal.png"/>
+    <Texture name="ui_blue-very-dark.png" path="UI\blue-very-dark.png"/>
+    <Texture name="ui_button-light-grey.png" path="UI\button-light-grey.png"/>
+    <Texture name="ui_button-red.png" path="UI\button-red.png"/>
+    <Texture name="ui_scroll-horizontal.png" path="UI\scroll-horizontal.png"/>
+    <Texture name="ui_scroll-thumb-active.png" path="UI\scroll-thumb-active.png"/>
+    <Texture name="ui_scroll-thumb-hover.png" path="UI\scroll-thumb-hover.png"/>
+    <Texture name="ui_scroll-thumb.png" path="UI\scroll-thumb.png"/>
+    <Texture name="ui_scroll-vertical.png" path="UI\scroll-vertical.png"/>
+    <Texture name="ui_slider-thumb-active.png" path="UI\slider-thumb-active.png"/>
+    <Texture name="ui_slider-thumb-hover.png" path="UI\slider-thumb-hover.png"/>
+    <Texture name="ui_slider-thumb.png" path="UI\slider-thumb.png"/>
+    <Texture name="ui_thumb-horizontal.png" path="UI\thumb-horizontal.png"/>
+    <Texture name="ui_thumb-vertical.png" path="UI\thumb-vertical.png"/>
+    <Texture name="ui_toggle-active.png" path="UI\toggle-active.png"/>
+    <Texture name="ui_toggle-hover.png" path="UI\toggle-hover.png"/>
+    <Texture name="ui_toggle-normal.png" path="UI\toggle-normal.png"/>
+    <Texture name="ui_toggle-on-active.png" path="UI\toggle-on-active.png"/>
+    <Texture name="ui_toggle-on-hover.png" path="UI\toggle-on-hover.png"/>
+    <Texture name="ui_toggle-on-normal.png" path="UI\toggle-on-normal.png"/>
+	</Resources>
+
+
+<!-- This value is automatically generated. Do not change it or you may break machine&level save files. -->
+<ID>a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2</ID>
+
+</Mod>

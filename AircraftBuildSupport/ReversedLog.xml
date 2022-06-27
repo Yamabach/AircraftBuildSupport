@@ -1,0 +1,53 @@
+<Block>
+	<Debug>True</Debug>
+	<ID>63</ID>
+	
+	<Name>Reversed Log</Name>
+	
+	<Mass>0.3</Mass>
+  <SearchKeywords>
+    <Keyword>Log</Keyword>
+    <Keyword>reversed</Keyword>
+    <Keyword>ABS</Keyword>
+  </SearchKeywords>
+
+  <Script>ABSspace.AdditionalBlockController.ReversedLog</Script>
+	<Mesh name="logMesh">
+		<Position x="0.0" y="0.0" z="2.5" />
+		<Rotation x="-90" y="0.0" z="0.0" />
+		<Scale x="0.5" y="0.5" z="0.5" />
+	</Mesh>
+	
+	<Texture name="logTex" />
+
+  <Icon>
+    <Position x="-0.1" y="-0.2" z="-0.5" />
+    <!--right, up, front-->
+    <Rotation x="20.0" y="145.0" z="40" />
+    <!--left, down, front-->
+    <Scale x="0.14" y="0.14" z="0.14" />
+  </Icon>
+	
+	<Colliders ignoreForGhost="true">
+		<BoxCollider>
+			<Position x="0.0" y="0.0" z="0.0" />
+			<Rotation x="0.0" y="0.0" z="0.0" />
+			<Scale x="1.0" y="1.0" z="1.0" />
+		</BoxCollider>
+	</Colliders>
+	
+	<BasePoint hasAddingPoint="false">
+		<Stickiness enabled="true" radius="0.6" />
+		<!-- Can only have motion if sticky -->
+		<Motion x="false" y="false" z="false" /> <!-- Optional -->
+	</BasePoint>
+	
+	<AddingPoints>
+		<!-- TODO: Insert AddingPoint definitions here. Example:-->
+		<AddingPoint>
+			<Position x="0.0" y="0.0" z="0.0" />
+			<Rotation x="0.0" y="0.0" z="0.0" />
+			<Stickiness enabled="false" radius="0"/>
+		</AddingPoint>
+	</AddingPoints>
+</Block>

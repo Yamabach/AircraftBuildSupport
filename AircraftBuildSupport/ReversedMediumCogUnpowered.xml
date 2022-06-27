@@ -1,0 +1,53 @@
+<Block>
+  <Debug>False</Debug>
+
+  <ID>38</ID>
+
+  <Name>Reversed Unpowered Cog</Name>
+
+  <Mass>0.5</Mass>
+
+  <SearchKeywords>
+    <Keyword>Cog</Keyword>
+    <keyword>Unpowered</keyword>
+    <Keyword>reversed</Keyword>
+    <Keyword>ABS</Keyword>
+  </SearchKeywords>
+
+  <Script>ABSspace.AdditionalBlockController.ReversedMediumCogUnpowered</Script>
+
+  <Mesh name="uCogMesh">
+    <Position x="0.0" y="0.0" z="0.48" />
+    <Rotation x="0.0" y="0.0" z="90" />
+    <Scale x="0.7" y="0.7" z="0.7" />
+  </Mesh>
+
+  <Texture name="uCogTex" />
+
+  <Icon>
+    <Position x="0.03" y="0.0" z="-0.8" />
+    <!--right, up, front-->
+    <Rotation x="20.0" y="145.0" z="-10.0" />
+    <!--left, down, front-->
+    <Scale x="0.3" y="0.3" z="0.3" />
+  </Icon>
+
+  <Colliders>
+    <BoxCollider ignoreForGhost="true">
+      <Position x="0.0" y="0.0" z="0.0" />
+      <Rotation x="0.0" y="0.0" z="0.0" />
+      <Scale x="1.0" y="1.0" z="1.0" />
+    </BoxCollider>
+  </Colliders>
+  <BasePoint hasAddingPoint="false">
+    <Stickiness enabled="true" radius="0.6" />
+    <Motion x="false" y="false" z="false" />
+  </BasePoint>
+  <AddingPoints>
+    <AddingPoint>
+      <Position x="0.0" y="0.0" z="0.0" />
+      <Rotation x="0.0" y="0.0" z="0.0" />
+      <Stickiness enabled="false" radius="0"/>
+    </AddingPoint>
+  </AddingPoints>
+</Block>

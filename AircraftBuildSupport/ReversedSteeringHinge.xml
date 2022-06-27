@@ -1,0 +1,56 @@
+<Block>
+	<Debug>False</Debug>
+	<ID>28</ID>
+	
+	<!-- Name of the block, shown in the user interface. -->
+	<Name>Reversed Steering Hinge</Name>
+	
+	<!-- TODO: Change the mass to something appropriate -->
+	<Mass>0.3</Mass>
+  <SearchKeywords>
+    <Keyword>SteeringHinge</Keyword>
+    <Keyword>reversed</Keyword>
+    <Keyword>ABS</Keyword>
+  </SearchKeywords>
+
+  <Script>ABSspace.AdditionalBlockController.ReversedSteeringHinge</Script>
+	
+	<Mesh name="sHingeMesh">
+		<Position x="0.0" y="0.0" z="1.0" />
+		<Rotation x="0.0" y="0.0" z="0.0" />
+		<Scale x="0.61" y="0.61" z="0.61" />
+	</Mesh>
+	
+	<Texture name="sHingeTex" />
+
+  <Icon>
+    <Position x="0.1" y="-0.2" z="-0.5" />
+    <!--right, up, front-->
+    <Rotation x="20.0" y="145.0" z="-10.0" />
+    <!--left, down, front-->
+    <Scale x="0.3" y="0.3" z="0.3" />
+  </Icon>
+	
+	<Colliders ignoreForGhost="">
+		<BoxCollider>
+			<Position x="0.0" y="0.0" z="0.0" />
+			<Rotation x="0.0" y="0.0" z="0.0" />
+			<Scale x="1.0" y="1.0" z="1.0" />
+		</BoxCollider>
+	</Colliders>
+	
+	<BasePoint hasAddingPoint="false">
+		<Stickiness enabled="true" radius="0.6" />
+		<!-- Can only have motion if sticky -->
+		<Motion x="false" y="false" z="false" /> <!-- Optional -->
+	</BasePoint>
+	
+	<AddingPoints>
+		<!-- TODO: Insert AddingPoint definitions here. Example:-->
+		<AddingPoint>
+			<Position x="0.0" y="0.0" z="0.0" />
+			<Rotation x="0.0" y="0.0" z="0.0" />
+			<Stickiness enabled="false" radius="0"/>
+		</AddingPoint>
+	</AddingPoints>
+</Block>

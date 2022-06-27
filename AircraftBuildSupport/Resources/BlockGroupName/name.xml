@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<block-group>
+  <group>
+    <label>group 0</label>
+    <label>group 1</label>
+    <label>group 2</label>
+    <label>group 3</label>
+    <label>group 4</label>
+    <label>group 5</label>
+    <label>group 6</label>
+    <label>group 7</label>
+    <label>group 8</label>
+    <label>group 9</label>
+  </group>
+</block-group>

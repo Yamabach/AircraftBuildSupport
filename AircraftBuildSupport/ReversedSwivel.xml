@@ -1,0 +1,52 @@
+<Block>
+  <Debug>False</Debug>
+
+  <ID>19</ID>
+
+  <Name>Reversed Swivel</Name>
+
+  <Mass>0.5</Mass>
+
+  <SearchKeywords>
+    <Keyword>Swivel</Keyword>
+    <Keyword>reversed</Keyword>
+    <Keyword>ABS</Keyword>
+  </SearchKeywords>
+
+  <Script>ABSspace.AdditionalBlockController.ReversedSwivel</Script>
+
+  <Mesh name="swivelMesh">
+    <Position x="0.0" y="0.0" z="0.5" />
+    <Rotation x="0.0" y="-90" z="90" />
+    <Scale x="0.5" y="0.5" z="0.5" />
+  </Mesh>
+
+  <Texture name="swivelTex" />
+
+  <Icon>
+    <Position x="0.03" y="0.0" z="-0.5" />
+    <!--right, up, front-->
+    <Rotation x="-70" y="145.0" z="-10.0" />
+    <!--left, down, front-->
+    <Scale x="0.3" y="0.3" z="0.3" />
+  </Icon>
+
+  <Colliders>
+    <BoxCollider ignoreForGhost="true">
+      <Position x="0.0" y="0.0" z="0.0" />
+      <Rotation x="0.0" y="0.0" z="0.0" />
+      <Scale x="1.0" y="1.0" z="1.0" />
+    </BoxCollider>
+  </Colliders>
+  <BasePoint hasAddingPoint="false">
+    <Stickiness enabled="true" radius="0.6" />
+    <Motion x="false" y="false" z="false" />
+  </BasePoint>
+  <AddingPoints>
+    <AddingPoint>
+      <Position x="0.0" y="0.0" z="0.0" />
+      <Rotation x="0.0" y="0.0" z="0.0" />
+      <Stickiness enabled="false" radius="0"/>
+    </AddingPoint>
+  </AddingPoints>
+</Block>

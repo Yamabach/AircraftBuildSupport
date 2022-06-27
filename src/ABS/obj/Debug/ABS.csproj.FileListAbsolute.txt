@@ -1,0 +1,48 @@
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ABS.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ABS.pdb
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Assembly-CSharp.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\DynamicText.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.UI.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Assembly-CSharp-firstpass.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\System.Threading.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Mono.Cecil.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.Networking.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Open.Nat.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\RakNetSwig.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\mcs.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\NATTraversalForUNET.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.CopyComplete
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.pdb
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ch.sycoforge.Decal.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.CoreCompileInputs.cache
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csprojAssemblyReference.cache
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.CoreCompileInputs.cache
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.pdb
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ABS.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ABS.pdb
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Assembly-CSharp.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\DynamicText.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.UI.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Assembly-CSharp-firstpass.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\mcs.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\System.Threading.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Mono.Cecil.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.Networking.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Open.Nat.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\RakNetSwig.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Ookii.Dialogs.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ch.sycoforge.Decal.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Ionic.Zip.Unity.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\NATTraversalForUNET.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Newtonsoft.Json.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\System.Runtime.Serialization.dll
+D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.CopyComplete
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Ookii.Dialogs.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Ionic.Zip.Unity.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\Newtonsoft.Json.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\System.Runtime.Serialization.dll
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.AssemblyReference.cache
