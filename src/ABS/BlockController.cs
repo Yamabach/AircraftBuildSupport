@@ -18,95 +18,110 @@ using ABSspace.BlockController.ModBlocks;
 
 namespace ABSspace
 {
+	/// <summary>
+	/// バニラブロックと他のmodによるブロックに関する名前空間
+	/// </summary>
 	namespace BlockController
 	{
+		/// <summary>
+		/// ブロックにスクリプトをアタッチするスクリプト
+		/// </summary>
 		public class BlockSelector : SingleInstance<BlockSelector>
 		{
 			public override string Name { get; }
-			internal PlayerMachineInfo PMI;
+			internal PlayerMachineInfo PMI { get; set; }
+			/// <summary>
+			/// バニラブロックとそれに割り当てるコンポーネントの組
+			/// </summary>
 			public Dictionary<int, Type> BlockDict = new Dictionary<int, Type>
 			{
+                // スタブロ
+                {
+					(int)BlockType.StartingBlock,
+					typeof(StartingBlockScript)
+                },
+
 				//木製ブロック系
 				{
-					15,
+					(int)BlockType.SingleWoodenBlock,
 					typeof(SingleWoodenBlockScript)
 				},
 				{
-					1,
+					(int)BlockType.DoubleWoodenBlock,
 					typeof(WoodenBlockScript)
 				},
 				{
-					63,
+					(int)BlockType.Log,
 					typeof(LogBlockScript)
 				},
 				{
-					41,
+					(int)BlockType.WoodenPole,
 					typeof(WoodenPoleScript)
 				},
 
 				//ヒンジ系
 				{
-					19,
+					(int)BlockType.Swivel,
 					typeof(SwivelScript)
 				},
 				{
-					44,
+					(int)BlockType.BallJoint,
 					typeof(BallJointScript)
 				},
 				{
-					5,
+					(int)BlockType.Hinge,
 					typeof(HingeScript)
 				},
 				{
-					28,
+					(int)BlockType.SteeringHinge,
 					typeof(SteeringHingeScript)
 				},
 				{
-					12,
+					(int)BlockType.ScalingBlock,
 					typeof(ScalingBlockScript)
 				},
 
 				//ホイール系
 				{
-					2,
+					(int)BlockType.Wheel,
 					typeof(MotorWheelScript)
 				},
 				{
-					40,
+					(int)BlockType.WheelUnpowered,
 					typeof(UnpoweredWheelScript)
 				},
 				{
-					38,
+					(int)BlockType.CogMediumUnpowered,
 					typeof(UnpoweredMediumCogScript)
 				},
 				{
-					39,
+					(int)BlockType.CogMediumPowered,
 					typeof(PoweredMediumCogScript)
 				},
 				{
-					17,
+					(int)BlockType.CircularSaw,
 					typeof(CircularSawScript)
 				},
 				{
-					46,
+					(int)BlockType.LargeWheel,
 					typeof(LargeWheelScript)
 				},
 				{
-					60,
+					(int)BlockType.LargeWheelUnpowered,
 					typeof(UnpoweredLargeWheelScript)
 				},
 				{
-					51,
+					(int)BlockType.CogLargeUnpowered,
 					typeof(UnpoweredLargeCogScript)
 				},
 
 				//プロペラ系
 				{
-					26,
+					(int)BlockType.Propeller,
 					typeof(PropellerScript)
 				},
 				{
-					55,
+					(int)BlockType.SmallPropeller,
 					typeof(SmallPropellerScript)
 				},
 				{
@@ -114,65 +129,65 @@ namespace ABSspace
 					typeof(Propeller52Script)
 				},
 				{
-					3,
+					(int)BlockType.MetalBlade,
 					typeof(MetalBladeScript)
 				},
 				{
-					20,
+					(int)BlockType.Spike,
 					typeof(SpikeScript)
 				},
 
 				//装甲系
 				{
-					10,
+					(int)BlockType.WoodenPanel,
 					typeof(WoodenPanelScript)
 				},
 				{
-					32,
+					(int)BlockType.ArmorPlateLarge,
 					typeof(ArmorPlateLargeScript)
 				},
 				{
-					24,
+					(int)BlockType.ArmorPlateSmall,
 					typeof(ArmorPlateSmallScript)
 				},
 				{
-					29,
+					(int)BlockType.ArmorPlateRound,
 					typeof(ArmorPlateRoundScript)
 				},
 
 				//武装系
 				{
-					11,
+					(int)BlockType.Cannon,
 					typeof(CannonScript)
 				},
 				{
-					53,
+					(int)BlockType.ShrapnelCannon,
 					typeof(ShrapnelCannonScript)
 				},
 				{
-					61,
+					(int)BlockType.Crossbow,
 					typeof(CrossbowScript)
 				},
 				{
-					62,
+					(int)BlockType.Vacuum,
 					typeof(VacuumScript)
 				},
 				{
-					56,
+					(int)BlockType.WaterCannon,
 					typeof(WaterCannonScript)
 				},
 
 				//球体系
 				{
-					23,
+					(int)BlockType.Bomb,
 					typeof(BombScript)
 				},
 				{
-					31,
+					(int)BlockType.FlameBall,
 					typeof(FlameBallScript)
 				},
 				{
-					36,
+					(int)BlockType.Boulder,
 					typeof(BoulderScript)
 				},
 
@@ -205,6 +220,9 @@ namespace ABSspace
                 },
 			//武装なんかも追加したい（ACM製ブロックを含む）
 			};
+			/// <summary>
+			/// modブロックとそれに割り当てるコンポーネントの組
+			/// </summary>
 			public Dictionary<string, Type> ModBlockDict = new Dictionary<string, Type>
 			{
 				#region オトカム砲
@@ -689,9 +707,16 @@ namespace ABSspace
 
 			public void Awake()
 			{
-				//ModConsole.Log("BlockSelector is awaken.");
+				Events.OnMachineLoaded += (pmi =>
+				{
+					PMI = pmi;
+				});
 				Events.OnBlockInit += new Action<Block>(AddScript);
 			}
+			/// <summary>
+			/// スクリプト割り当て
+			/// </summary>
+			/// <param name="block"></param>
 			public void AddScript(Block block)
 			{
 				BlockBehaviour internalObject = block.BuildingBlock.InternalObject;
@@ -735,7 +760,10 @@ namespace ABSspace
 				}
 			}
 		}
-		public abstract class AbstractBlockScript : MonoBehaviour //ブロック基本
+		/// <summary>
+		/// ブロック基本
+		/// </summary>
+		public abstract class AbstractBlockScript : MonoBehaviour
 		{
 			[Obsolete]
 			public Action<XDataHolder> BlockDataLoadEvent;
@@ -761,6 +789,10 @@ namespace ABSspace
 				}
 				DisplayInMapper(CombatUtilities);
 			}
+			private void Start()
+            {
+				BB = GetComponent<BlockBehaviour>();
+            }
 			private void Update()
 			{
 				if (BB.isSimulating)
@@ -926,34 +958,57 @@ namespace ABSspace
 			{
 				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlock01();
+					ModifyBlockG();
 				}
 				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlock02();
+					ModifyBlockT();
 				}
 				if (Input.GetKeyDown(KeyCode.H) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlock03();
+					ModifyBlockH();
 				}
 				if (Input.GetKeyDown(KeyCode.Y) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlock04();
+					ModifyBlockY();
+				}
+				if (Input.GetKeyDown(KeyCode.B) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				{
+					ModifyBlockB();
+				}
+				if (Input.GetKeyDown(KeyCode.N) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				{
+					ModifyBlockN();
 				}
 				CoLController.CoLGUI.picked = BB; // トランスフォーム表示用
 			}
 
 			//ショートカット系
-			public virtual void ModifyBlock01() //Gキーが押されたときに呼び出し
-			{
-				//ModConsole.Log("ABC.ModifyBlock01 : called  Selected block is " + BB.name);
-			}
-			public virtual void ModifyBlock02() //Tキーが押されたときに呼び出し
-			{
-				//ModConsole.Log("ABS.ModifyBlock02 : called  Selected block is " + BB.name);
-			}
-			public virtual void ModifyBlock03() { }
-			public virtual void ModifyBlock04() { }
+			/// <summary>
+			/// Gキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockG() { }
+			/// <summary>
+			/// Tキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockT() { }
+			/// <summary>
+			/// Hキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockH() { }
+			/// <summary>
+			/// Yキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockY() { }
+			/// <summary>
+			/// Bキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockB() { }
+			/// <summary>
+			/// Nキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockN() { }
+
 			public AbstractBlockScript()
 			{
 				CombatUtilities = true;
@@ -961,25 +1016,56 @@ namespace ABSspace
 			}
 
 		}
-		public abstract class BlockExchangerScript : AbstractBlockScript //プロペラ等に追加するコンポーネントの元
+		/// <summary>
+		/// ブロック交換用コンポーネント
+		/// </summary>
+		public abstract class BlockExchangerScript : AbstractBlockScript
 		{
+			/// <summary>
+			/// 日本語化
+			/// </summary>
 			public bool isJapanese = Mod.isJapanese;
 
-			//ブロックデータ
-			public Block block; //既存のブロック //BlockBehaviourはBBで取得できる
-			public Block newBlock;
+			// ブロックデータ
+			/// <summary>
+			/// ブロックデータ
+			/// </summary>
+			public Block block;
+			/// <summary>
+			/// 交換先のBlockBehaviour
+			/// </summary>
 			public BlockBehaviour newBB;
+			/// <summary>
+			/// プレイヤー
+			/// </summary>
 			public PlayerMachine PM;
+			/// <summary>
+			/// マシン
+			/// </summary>
 			public Machine machine;
-			public Transform InitTransform;
 
-			//新ブロック交換系
+			// ブロック交換系UI
+			/// <summary>
+			/// ブロック交換先を選ぶメニュー
+			/// </summary>
 			public MMenu ExchangeMenu;
+			/// <summary>
+			/// ブロック交換ボタン
+			/// </summary>
 			public MToggle ExchangeToggle;
+			/// <summary>
+			/// ブロック交換先
+			/// </summary>
 			public List<BlockType> ExchangeList;
+			/// <summary>
+			/// ブロック交換先の名称
+			/// </summary>
 			public List<string> ExchangeListMenu;
 
-			public string displayName //"ブロック交換"
+			/// <summary>
+			/// ブロック交換ボタンに記載される名称
+			/// </summary>
+			public string displayName
 			{
 				get
 				{
@@ -990,31 +1076,19 @@ namespace ABSspace
 					return isJapanese ? "ブロック交換" : "Exchange";
 				}
 			}
-
+			/// <summary>
+			/// mod系ブロックであるかどうか
+			/// </summary>
 			public bool isModBlock = false;
 
-			//ペラ・ウッドパネル交換系
-			public bool isWoodenPanel = false;
-			public bool isPropeller = false;
-			public MToggle PPToggle;
-			public string PPToggleLabel
-			{
-				get
-				{
-					if (isPropeller)
-					{
-						return isJapanese ? "ウッドパネルに変更" : "Exchange to Wooden Panel";
-					}
-					if (isWoodenPanel)
-					{
-						return isJapanese ? "短プロペラに変更" : "Exchange to Propeller";
-					}
-					return "";
-				}
-			}
-
 			// ブロックのグループ化系
+			/// <summary>
+			/// ブロックのグループの名称
+			/// </summary>
 			public MMenu GroupMenu;
+			/// <summary>
+			/// 現在のブロックのグループのラベル
+			/// </summary>
 			public int groupLabel
             {
                 get
@@ -1030,30 +1104,16 @@ namespace ABSspace
 				ExchangeListMenu = new List<string>();
 				block = Block.From(BB);
 				PM = block.Machine;
-				//machine = PM.InternalObject;
-				machine = BB.ParentMachine;
-				InitTransform = BB.transform;
+				machine = Machine.Active();
 				Mod.CheckExtended(); //再チェック
-
-				//modブロック交換系
-				ModBlockSafeAwake();
 
 				//ブロック交換系
 				SetBlockList();
-				if (ExchangeList.Count > 0)
+				if (ExchangeList.Count > 0 && !StatMaster.isClient) // クライアントの場合はショートカットのみ
                 {
 					ExchangeMenu = BB.AddMenu("ExchangeMenu", 0, ExchangeListMenu, false);
 					ExchangeToggle = BB.AddToggle(displayName, "Exchange", false);
 				}
-
-				//プロペラ・パネル交換系
-				if (isPropeller || isWoodenPanel)
-				{
-					PPToggle = BB.AddToggle(PPToggleLabel, PPToggleLabel, false);
-				}
-
-				CanShortenBlockSafeAwake();
-				PropellerSafeAwake();
 
 				//ブロックのグループ化系
 				GroupMenu = BB.AddMenu("Group", 0, Mod.blockGroup.labels, true);
@@ -1061,182 +1121,284 @@ namespace ABSspace
 
 			public override void BuildingUpdate()
 			{
+				if (BB == null)
+                {
+					BB = gameObject.GetComponent<BlockBehaviour>();
+					Mod.Log($"BuildingUpdate BB is {BB != null}"); // 出てこない
+                }
 				if (ExchangeList.Count > 0)
 				{
 					if (ExchangeToggle.IsActive)
 					{
+						// トグルを元に戻す
 						ExchangeToggle.IsActive = false;
+
+						// トグルを変更した履歴を削除
 						machine.UndoSystem.Undo();
+
+						// ブロック交換
 						ChangeBlock(ExchangeList[ExchangeMenu.Value]);
 					}
 				}
-				ModBlockBuildingUpdate();
-				
-				if (isPropeller || isWoodenPanel) //短ペラ・ウッドパネル交換系
-				{
-					if (PPToggle.IsActive)
-					{
-						//プロペラとウッドパネルを交換する
-						PPToggle.IsActive = false;
-						//machine.UndoSystem.Undo();
-						Vector3 lastPosition = BB.transform.position;
-						Quaternion lastRotation = BB.transform.rotation;
-						Quaternion nextRotation = BB.transform.localRotation * Quaternion.AngleAxis(90 * (isPropeller ? 1 : -1), Vector3.left);
-						if (machine.AddBlock(new BlockInfo
-						{
-							ID = isPropeller ? BlockType.WoodenPanel : BlockType.SmallPropeller,
-							Position = BB.transform.localPosition,
-							Rotation = nextRotation,
-							Scale = BB.transform.localScale,
-							Flipped = BB.Flipped,
-							Skin = BB.VisualController.selectedSkin,
-							BlockData = new XDataHolder()
-						}, out newBB)) //条件文でブロックを追加
-						{
-							machine.RemoveBlock(BB);
-							newBB.VisualController.PlaceFromBlock(newBB);
-							//machine.UndoSystem.AddAction(new UndoActionExchange(machine, BlockInfo.FromBlockBehaviour(BB), BlockInfo.FromBlockBehaviour(newBB)));
-							//これはうまくいくので、たぶんUndoActionExchangeが壊れている
-							machine.UndoSystem.AddActions(
-								new List<UndoAction> 
-								{
-									new UndoActionAdd(machine, BlockInfo.FromBlockBehaviour(newBB)),
-									new UndoActionRemove(machine, BlockInfo.FromBlockBehaviour(BB))
-								}
-								);
-						}
-					}
-				}
-				CanShortenBlockBuildingUpdate();
-				PropellerBuildingUpdate();
-			}
-			public override void SimulateFixedUpdateAlways()
-			{
-				PropellerSimulationUpdate();
 			}
 
 			//ブロック交換系
-			public abstract void SetBlockList(); //ExchangeListとExchangeListMenu
-			public void ChangeBlock(BlockType BlockID) //指定したブロックと交換する
+			/// <summary>
+			/// ExchangeListとExchangeListMenu
+			/// </summary>
+			public abstract void SetBlockList();
+			/// <summary>
+			/// 指定したブロックと交換する
+			/// </summary>
+			/// <param name="to">交換先のブロックのBlockType</param>
+			/// <param name="rotate">交換時に回転を行う場合に記載</param>
+			/// <param name=shorten">交換時に長さを短くする</param>
+			/// <returns>交換後のブロック</returns>
+			public void ChangeBlock(BlockType to, Quaternion rotate, bool shorten=false)
 			{
+				// 他プレイヤーのブロックなら何もしない
+				if (BB.parentBlock != null)
+                {
+					Mod.Log($"parentBlock isnt null");
+                }
+				Mod.Log($"exchange list count = {ExchangeList.Count}");
+				if (BB.ParentMachine != Machine.Active())
+                {
+					return;
+				}
+				if (BB == null)
+				{
+					BB = this.gameObject.GetComponent<BlockBehaviour>(); // ここでエラー！？！？
+					Mod.Log($"test0: BB = {BB != null}");
+				}
+
+				// ステヒンのみ、回転時に90°回転させる
+				if (BB.BlockID == (int)BlockType.SteeringHinge)
+                {
+					BB.transform.Rotate(Vector3.forward, 90f);
+                }
+				Mod.Log($"test1: BB = {BB != null} newBB = {newBB != null}"); // クライアントでBBがnullになってしまう
+				// ブロック追加
 				if (machine.AddBlock(new BlockInfo
 					{
-						ID = BlockID,
+						ID = to,
 						Position = BB.transform.localPosition,
-						Rotation = BB.transform.localRotation,
+						Rotation = BB.transform.localRotation * rotate * (to == BlockType.SteeringHinge ? Quaternion.AngleAxis(-90f, Vector3.forward) : Quaternion.identity), // ステヒンのみ90°回転
 						Scale = BB.transform.localScale,
 						Flipped = BB.Flipped,
-						Skin = BB.VisualController.selectedSkin,
 						BlockData = new XDataHolder()
 					}, out newBB))
 				{
+					Mod.Log("test2");
 					newBB.VisualController.PlaceFromBlock(newBB);
-					//Mod.Log(string.Format("From {0}, {1}", BB.VisualController.selectedSkin.prefab.name, BB.VisualController.selectedSkin.pack.name));
-					//Mod.Log(string.Format("To {0}, {1}", newBB.VisualController.selectedSkin.prefab.name, newBB.VisualController.selectedSkin.pack.name));
-					//newBB.VisualController.selectedSkin = FindSkin(BB.VisualController.selectedSkin.pack, newBB);
-					machine.RemoveBlock(BB); //ブロック長さ変更の時にぬるぽ
+					Mod.Log("test3");
+					// スキン変更
+					ReplaceSkin(BB);
+					Mod.Log("test4");
+					// 長さ変更
+					if (shorten)
+					{
+						var ShortenBB = (ShorteningBlock)newBB;
+						ShortenBB.UpdateLength(ShortenBB.startingLength - 1, true);
+					}
+					Mod.Log("test5");
+					// 変更元のブロック削除（ブロック長さ変更の時にぬるぽ）
+					machine.RemoveBlock(BB);
 				}
+                else
+                {
+					Mod.Error("Failed to change block!");
+                }
+				Mod.Log("test6");
+				// UndoAction登録
 				machine.UndoSystem.AddActions(
 					new List<UndoAction>
-						{
-							new UndoActionAdd(machine, BlockInfo.FromBlockBehaviour(newBB)),
-							new UndoActionRemove(machine, BlockInfo.FromBlockBehaviour(BB))
-						}
-					);
+					{
+						new UndoActionAdd(machine, BlockInfo.FromBlockBehaviour(newBB)),
+						new UndoActionRemove(machine, BlockInfo.FromBlockBehaviour(BB))
+					}
+				);
+				Mod.Log("test7");
+				return;
 			}
-			public class UndoActionExchange : UndoAction //AddとRemoveを組み合わせた形 //スケールやスキンも引き継ぐ //ステータスをコピペする
-			{
-				BlockInfo newInfo;
-				Guid newGuid;
+			public void ChangeBlock(BlockType to)
+            {
+				ChangeBlock(to, Quaternion.identity);
+            }
+			/// <summary>
+			/// modブロックへ交換する
+			/// </summary>
+			/// <param name="globalId"></param>
+			/// <param name="localId"></param>
+			/// <param name="rotate"></param>
+			/// <returns></returns>
+			public BlockBehaviour ChangeModBlock(Guid globalId, int localId, Quaternion rotate)
+            {
+				// ブロック追加
+				var newBlock = PM.AddBlock(
+							globalId,
+							localId,
+							BB.transform.localPosition,
+							BB.transform.localRotation * rotate,
+							BB.Flipped);
+				//UndoやRedoを2回使わないといけない仕様は、たぶんしょうがない
+				if (newBlock != null)
+				{
+					newBB = newBlock.InternalObject;
+					newBB.gameObject.transform.localScale = block.GameObject.transform.localScale; //スケールは揃える
+					newBB.VisualController.PlaceFromBlock(newBB);
 
-				public UndoActionExchange(Machine m, BlockInfo preInfo, BlockInfo newInfo)
-				{
-					Debug.Log("ABS : UndoActionExchange : called");
-					info = preInfo;
-					this.newInfo = newInfo;
-					guid = preInfo.Guid;
-					newGuid = newInfo.Guid;
-					changesCount = true;
-					machine = m;
+					// スキン変更
+					ReplaceSkin(BB);
+
+					// 変更元のブロック削除（ブロック長さ変更の時にぬるぽ）
+					machine.RemoveBlock(BB);
 				}
-				public override bool Redo()
+				else
 				{
-					//ModConsole.Log("Redo");
-					BlockBehaviour block;
-					BlockBehaviour blockBehaviour;
-					if (machine.AddBlock(newInfo, out blockBehaviour))
-					{
-						blockBehaviour.VisualController.PlaceFromBlockInfo(newInfo);
-					}
-					if (machine.GetBlock(guid, out block))
-					{
-						/*
-						BlockMapper.Open(block).Copy();
-						BlockMapper.Close();
-						BlockMapper.Open(blockBehaviour).Paste();
-						BlockMapper.Close();
-						*/
-						machine.RemoveBlock(block);
-					}
-					return true;
+					Mod.Error("Failed to change mod block!");
 				}
-				public override bool Undo()
-				{
-					//ModConsole.Log("Undo");
-					BlockBehaviour blockBehaviour;
-					BlockBehaviour block;
-					if (machine.AddBlock(info, out blockBehaviour))
+
+				// UndoAction登録
+				machine.UndoSystem.AddActions(
+					new List<UndoAction>
 					{
-						blockBehaviour.VisualController.PlaceFromBlockInfo(info);
+						//new UndoActionAdd(machine, BlockInfo.FromBlockBehaviour(newBB)),
+						new UndoActionRemove(machine, BlockInfo.FromBlockBehaviour(BB))
 					}
-					if (machine.GetBlock(newGuid, out block))
-					{
-						//いったんコピペをやめる //ここが間違い!?
-						/*
-						BlockMapper.Open(block).Copy();
-						BlockMapper.Close();
-						BlockMapper.Open(blockBehaviour).Paste();
-						BlockMapper.Close();
-						*/
-						machine.RemoveBlock(block);
-					}
-					return true;
-				}
+				);
+				return newBB;
 			}
-			public BlockSkinLoader.SkinPack.Skin FindSkin(BlockSkinLoader.SkinPack pack, BlockBehaviour bb) // packの中のbbに対応するskinを返す
+			public BlockBehaviour ChangeModBlock(Guid globalId, int localId)
+            {
+				return ChangeModBlock(globalId, localId, Quaternion.identity);
+            }
+			/// <summary>
+			/// packの中のブロックに対応するskinを返す
+			/// </summary>
+			/// <param name="pack"></param>
+			/// <param name="type"></param>
+			/// <returns></returns>
+			public BlockSkinLoader.SkinPack.Skin FindSkin(BlockSkinLoader.SkinPack pack, BlockType type)
             {
 				foreach (BlockSkinLoader.SkinPack.Skin skin in pack.skins)
                 {
-					if (skin.prefab == bb.Prefab)
+					if (skin.prefab.Type == type)
                     {
 						return skin;
                     }
                 }
 				return null;
             }
-
-			//modブロック交換系
-			public virtual void ModBlockSafeAwake() { }
-			public virtual void ModBlockBuildingUpdate() { }
-
-			//ブロック短縮系
-			public virtual void CanShortenBlockSafeAwake() { }
-			public virtual void CanShortenBlockBuildingUpdate() { }
-
-			//プロペラの空力をベクトル表示
-			public virtual void PropellerSafeAwake() { }
-			public virtual void PropellerBuildingUpdate() { }
-			public virtual void PropellerSimulationUpdate() { }
-		}
+			/// <summary>
+			/// ブロックのスキンを更新する
+			/// </summary>
+			/// <param name="to">変更先のスキン</param>
+			public void ReplaceSkin(BlockSkinLoader.SkinPack.Skin to)
+            {
+				if (StatMaster.isMP)
+				{
+					NetworkAuxAddPiece.Instance.ChangeBlockSkin(newBB, to);
+				}
+				else
+				{
+					newBB.VisualController.ReplaceSkin(to);
+				}
+				newBB.OnUpdateSkin();
+			}
+			/// <summary>
+			/// ブロックのスキンを更新する
+			/// </summary>
+			/// <param name="to">変更先のスキンを持つブロック</param>
+			public void ReplaceSkin(BlockBehaviour to)
+            {
+				ReplaceSkin(to.VisualController.selectedSkin);
+            }
+			/// <summary>
+			/// ブロック交換
+			/// </summary>
+            public override void ModifyBlockB()
+            {
+				ChangeBlock(ExchangeList[0]);
+            }
+        }
 		
 		namespace VanillaBlocks
 		{
-			public abstract class AbstractShortenableBlockScript : BlockExchangerScript
+			public class StartingBlockScript : BlockExchangerScript
+			{
+				/// <summary>
+				/// 前方を示す
+				/// ボックスと同じ方向にする
+				/// </summary>
+				public GameObject frontObject;
+				public override void SetBlockList() { }
+				public override void SafeAwake()
+				{
+					base.SafeAwake();
+
+					// メニューなら何もしない
+					if (machine == null) return;
+
+					// 空力中心軸と重心の軸のためのゲームオブジェクト
+					if (frontObject == null)
+					{
+						frontObject = new GameObject("Front Object");
+						frontObject.transform.parent = transform;
+					}
+
+					// CoLGUIに反映させる
+					CoLController.CoLGUI.Instance.startingBlockScript = this;
+				}
+                public override void BuildingUpdate()
+                {
+                    base.BuildingUpdate();
+
+					// ボックスと同じ方向にする
+					if (StatMaster.isMP)
+					{
+						frontObject.transform.rotation = machine.boundingBoxController.transform.rotation; // (machine as ServerMachine).player.buildZone.transform.rotation;
+						//Mod.Log($"{Quaternion.Angle(frontObject.transform.rotation, (machine as ServerMachine).player.buildZone.transform.rotation)}"); // 0
+					}
+					else
+					{
+						frontObject.transform.rotation = Quaternion.identity;
+					}
+				}
+                public override void OnSimulateStart()
+                {
+					if (StatMaster.isMP)
+					{
+						frontObject.transform.rotation = Quaternion.Lerp(machine.boundingBoxController.transform.rotation, Quaternion.identity, 0.5f);
+						Mod.Log($"{Quaternion.Angle(frontObject.transform.rotation, (machine as ServerMachine).player.buildZone.transform.rotation)}"); // 0
+					}
+                    else
+                    {
+						frontObject.transform.rotation = Quaternion.identity;
+                    }
+                }
+            }
+            public abstract class AbstractShortenableBlockScript : BlockExchangerScript
 			{
 				//ブロック短縮化系
-				public bool isShort;
-				public ShorteningBlock ShortenBB;
+				/// <summary>
+				/// 短縮されているかどうか
+				/// </summary>
+				public bool isShortened
+                {
+                    get
+                    {
+						return !BB.gameObject.transform.FindChild("Joint").gameObject.activeSelf;
+
+					}
+                }
+				/// <summary>
+				/// ブロックを短縮化するボタン
+				/// </summary>
 				public MToggle SToggle;
+				/// <summary>
+				/// ブロックを短縮化するボタンの表記
+				/// </summary>
 				public string SToggleLabel
 				{
 					get
@@ -1249,15 +1411,18 @@ namespace ABSspace
 				{
 					
 				}
-				public override void CanShortenBlockSafeAwake()
+				public override void SafeAwake()
 				{
+					base.SafeAwake();
+
 					//ブロック短縮化系
-					
-					SToggle = BB.AddToggle(SToggleLabel, SToggleLabel, false);
-					
+					if (!StatMaster.isClient) SToggle = BB.AddToggle(SToggleLabel, "change-length", false);
 				}
-				public override void CanShortenBlockBuildingUpdate()
+				public override void BuildingUpdate()
 				{
+					base.BuildingUpdate();
+
+					// ブロック短縮化
 					if (SToggle.IsActive)
 					{
 						SToggle.IsActive = false;
@@ -1265,98 +1430,22 @@ namespace ABSspace
 						Shorten();
 					}
 				}
+				/// <summary>
+				/// ブロックの長さを変更
+				/// </summary>
 				public void Shorten()
 				{
-					if (!BB.gameObject.transform.FindChild("Joint").gameObject.activeSelf) //短い時
+					if (isShortened) // 長くする時
 					{
-						if (machine.AddBlock(new BlockInfo
-						{
-							ID = BB.Prefab.Type,
-							Position = BB.transform.localPosition,
-							Rotation = BB.transform.localRotation,
-							Scale = BB.transform.localScale,
-							Flipped = BB.Flipped,
-							Skin = BB.VisualController.selectedSkin,
-							BlockData = new XDataHolder()
-						}, out newBB))
-						{
-							ShortenBB = (ShorteningBlock)newBB;
-							newBB.VisualController.PlaceFromBlock(ShortenBB);
-							machine.RemoveBlock(BB);
-						}
-						machine.UndoSystem.AddAction(new UndoActionChangeLength(machine, BlockInfo.FromBlockBehaviour(BB), BlockInfo.FromBlockBehaviour(ShortenBB)));
+						ChangeBlock((BlockType)BB.BlockID);
 					}
-					else
+					else // 短くする時
 					{
-						if (machine.AddBlock(new BlockInfo
-						{
-							ID = BB.Prefab.Type,
-							Position = BB.transform.localPosition,
-							Rotation = BB.transform.localRotation,
-							Scale = BB.transform.localScale,
-							Flipped = BB.Flipped,
-							Skin = BB.VisualController.selectedSkin,
-							BlockData = new XDataHolder()
-						}, out newBB))
-						{
-							ShortenBB = (ShorteningBlock)newBB;
-							newBB.VisualController.PlaceFromBlock(ShortenBB);
-							ShortenBB.UpdateLength(ShortenBB.startingLength - 1, true);
-							machine.RemoveBlock(BB);
-						}
-						machine.UndoSystem.AddAction(new UndoActionChangeLength(machine, BlockInfo.FromBlockBehaviour(BB), BlockInfo.FromBlockBehaviour(ShortenBB)));
+						ChangeBlock((BlockType)BB.BlockID, Quaternion.identity, true);
 					}
 				}
-				public class UndoActionChangeLength : UndoAction //AddとRemoveを組み合わせた形 //スケールやスキンも引き継ぐ //ステータスをコピペする
+				public override void ModifyBlockN()
 				{
-					BlockInfo newInfo;
-					Guid newGuid;
-
-					public UndoActionChangeLength(Machine m, BlockInfo preInfo, BlockInfo newInfo)
-					{
-						info = preInfo;
-						this.newInfo = newInfo;
-						guid = info.Guid;
-						newGuid = this.newInfo.Guid;
-						changesCount = true;
-						machine = m;
-					}
-					public override bool Redo()
-					{
-						//ModConsole.Log("Redo");
-						BlockBehaviour block;
-						BlockBehaviour blockBehaviour;
-						if (machine.AddBlock(newInfo, out blockBehaviour))
-						{
-							blockBehaviour.VisualController.PlaceFromBlockInfo(newInfo);
-
-						}
-						if (machine.GetBlock(guid, out block))
-						{
-							machine.RemoveBlock(block);
-						}
-						return true;
-					}
-					public override bool Undo()
-					{
-						//ModConsole.Log("Undo");
-						BlockBehaviour blockBehaviour;
-						BlockBehaviour block;
-						if (machine.AddBlock(info, out blockBehaviour))
-						{
-							blockBehaviour.VisualController.PlaceFromBlockInfo(info);
-
-						}
-						if (machine.GetBlock(newGuid, out block))
-						{
-							machine.RemoveBlock(block);
-						}
-						return true;
-					}
-				}
-				public override void ModifyBlock01()
-				{
-					//machine.UndoSystem.Undo();
 					Shorten();
 				}
 			}
@@ -1380,10 +1469,6 @@ namespace ABSspace
 			}
 			public class WoodenBlockScript : AbstractShortenableBlockScript
 			{
-				public WoodenBlockScript()
-				{
-					isShort = false;
-				}
 				public override void SetBlockList()
 				{
 					ExchangeList = new List<BlockType>
@@ -1403,10 +1488,6 @@ namespace ABSspace
 			}
 			public class LogBlockScript : AbstractShortenableBlockScript
 			{
-				public LogBlockScript()
-				{
-					isShort = false;
-				}
 				public override void SetBlockList()
 				{
 					ExchangeList = new List<BlockType>
@@ -1425,10 +1506,6 @@ namespace ABSspace
 			}
 			public class WoodenPoleScript : AbstractShortenableBlockScript
 			{
-				public WoodenPoleScript()
-				{
-					isShort = false;
-				}
 				public override void SetBlockList()
 				{
 					ExchangeList = new List<BlockType>
@@ -1769,6 +1846,20 @@ namespace ABSspace
 			}
 			public abstract class AbstractPropellerScript : BlockExchangerScript
 			{
+				/// <summary>
+				/// ペラと木製パネルを交換するボタン
+				/// </summary>
+				public MToggle PPToggle;
+				/// <summary>
+				/// ペラと木製パネルの交換ボタンに記載される名称
+				/// </summary>
+				public string PPToggleLabel
+				{
+					get
+					{
+						return isJapanese ? "ウッドパネルに変更" : "Exchange to Wooden Panel";
+					}
+				}
 				public bool isFirst = true;
 				public GameObject AxisParent;
 				public LineRenderer axis;
@@ -1802,25 +1893,23 @@ namespace ABSspace
 					}
 					return null; //見つからなかったら
 				}
+				public override void SafeAwake()
+				{
+					base.SafeAwake();
 
-				public AbstractPropellerScript()
-				{
-					isPropeller = true;
-					isWoodenPanel = false;
-				}
-				public override void PropellerSafeAwake()
-				{
 					if (!BB.isSimulating)
 					{
 						axis = new LineRenderer();
 					}
+
+					// 空気抵抗軸関係のゲームオブジェクト初期化
 					AxisParent = new GameObject("Aerodynamic Arrow");
 					AxisParent.transform.parent = BB.transform;
 					machine = Machine.Active();
 					component = GetComponent<AxialDrag>();
 					if (component == null)
 					{
-						Mod.LogError("AxialDrag is null!");
+						Mod.Error("AxialDrag is null!");
 					}
 					if (!isFirst)
 					{
@@ -1831,9 +1920,14 @@ namespace ABSspace
 					axis.material = new Material(Shader.Find("Sprites/Default"));
 					axis.GetComponent<Renderer>().material.color = Color.cyan;
 					isFirst = false;
+
+					//プロペラ・パネル交換系
+					if (!StatMaster.isClient) PPToggle = BB.AddToggle(PPToggleLabel, "exchange-to-wooden-panel", false);
 				}
-				public override void PropellerBuildingUpdate() // ここでぬるぽ
+				public override void BuildingUpdate() // ここでぬるぽ
 				{
+					base.BuildingUpdate();
+
 					if (machine == null)
 					{
 						machine = block.Machine.InternalObject;
@@ -1859,30 +1953,32 @@ namespace ABSspace
 							});
 						}
 					}
+
+					//短ペラ・ウッドパネル交換系
+					if (PPToggle.IsActive)
+					{
+						//プロペラとウッドパネルを交換する
+						PPToggle.IsActive = false;
+						machine.UndoSystem.Undo();
+						ChangeBlock(BlockType.WoodenPanel, Quaternion.AngleAxis(90f, Vector3.left));
+					}
 				}
-				public override void PropellerSimulationUpdate()
+                public override void SimulateFixedUpdateAlways()
 				{
+					base.SimulateFixedUpdateAlways();
+
 					if (machine == null)
 					{
 						machine = block.Machine.InternalObject;
 					}
 					if (axis == null)
                     {
-						Mod.LogError("axis is null");
+						Mod.Error("axis is null");
                     }
 					axis.enabled = CoLController.CoLGUI.Instance.ShowLiftVectors;
 					if (axis.enabled)
                     {
 						Vector3 center = BB.GetCenter();
-						/* // ここは関係ない
-						if (CoLController.CoLGUI.IsGlobal)
-						{
-							axis.SetPositions(new Vector3[2] {
-								center,
-								center + new Vector3(0, 0, 0.1f * component.AxisDrag.y * (machine.Rotation * BB.transform.rotation * Vector3.up).z * (BB.Flipped ? -1 : 1))
-							});
-						}
-						*/
 						axis.SetPositions(new Vector3[2] {
 							center,
 							//center + 100 * component.AxisDrag[1] * (machine.Rotation * BB.transform.rotation * Vector3.up)
@@ -1890,7 +1986,11 @@ namespace ABSspace
 						});
 					}
 				}
-				public Vector3 PropellerForce() // プロペラにかかる揚力（抵抗）を求める
+				/// <summary>
+				/// プロペラにかかる揚力（抵抗）を求める
+				/// </summary>
+				/// <returns>プロペラにかかる揚力（抵抗）</returns>
+				public Vector3 PropellerForce()
                 {
 					Vector3 currentVelocity = component.Rigidbody.velocity;
 					Vector3 a = component.upTransform.InverseTransformDirection(currentVelocity);
@@ -1902,55 +2002,61 @@ namespace ABSspace
 				{
 					
 				}
-				public override void ModifyBlock01()
+				/// <summary>
+				/// 水平化
+				/// </summary>
+				public override void ModifyBlockG()
 				{
-					//machine.UndoSystem.Undo(); //これはトグルを元に戻すことと同じ
-					float deg = angleFlat * (BB.Flipped ? 1 : -1);
+					Rotate(true, false);
+				}
+				/// <summary>
+				/// 水平化の逆
+				/// </summary>
+				public override void ModifyBlockT()
+				{
+					Rotate(true, true);
+				}
+				/// <summary>
+				/// 謎加速角度化
+				/// </summary>
+				public override void ModifyBlockH()
+				{
+					Rotate(false, false);
+				}
+				/// <summary>
+				/// 謎加速角度化の逆
+				/// </summary>
+				public override void ModifyBlockY()
+				{
+					Rotate(false, true);
+				}
+				/// <summary>
+				/// ウッドパネルと交換
+				/// </summary>
+                public override void ModifyBlockN()
+                {
+					ChangeBlock(BlockType.WoodenPanel, Quaternion.AngleAxis(90f, Vector3.left));
+				}
+                /// <summary>
+                /// 水平または謎加速角度になるように回転させる
+                /// </summary>
+                /// <param name="flatten">水平にする方向への回転であるかどうか</param>
+                /// <param name="isNazokasoku">謎加速角度への回転であるかどうか</param>
+                private void Rotate(bool flatten, bool isNazokasoku=false)
+                {
+					float deg = (flatten ? 1 : -1) * (isNazokasoku ? angleFlat / 2 : angleFlat) * (BB.Flipped ? 1 : -1);
 					Vector3 lastPosition = BB.transform.localPosition;
 					Quaternion lastRotation = BB.transform.localRotation;
-					machine.RotateBlock(BB.Guid, lastRotation * Quaternion.AngleAxis(deg, Vector3.forward));
+					BB.transform.Rotate(Vector3.forward, deg);
 					machine.UndoSystem.AddAction(
 						new UndoActionRotate(machine, BB.Guid, lastPosition, lastPosition, BB.transform.localRotation, lastRotation)
 						);
 				}
-				public override void ModifyBlock02()
-				{
-					float deg = angleFlat/2 * (BB.Flipped ? 1 : -1);
-					Vector3 lastPosition = BB.transform.localPosition;
-					Quaternion lastRotation = BB.transform.localRotation;
-					machine.RotateBlock(BB.Guid, lastRotation * Quaternion.AngleAxis(deg, Vector3.forward));
-					machine.UndoSystem.AddAction(
-						new UndoActionRotate(machine, BB.Guid, lastPosition, lastPosition, BB.transform.localRotation, lastRotation)
-						);
-				}
-				public override void ModifyBlock03()
-				{
-					float deg = -angleFlat * (BB.Flipped ? 1 : -1);
-					Vector3 lastPosition = BB.transform.localPosition;
-					Quaternion lastRotation = BB.transform.localRotation;
-					machine.RotateBlock(BB.Guid, lastRotation * Quaternion.AngleAxis(deg, Vector3.forward));
-					machine.UndoSystem.AddAction(
-						new UndoActionRotate(machine, BB.Guid, lastPosition, lastPosition, BB.transform.localRotation, lastRotation)
-						);
-				}
-				public override void ModifyBlock04()
-				{
-					float deg = -angleFlat/2 * (BB.Flipped ? 1 : -1);
-					Vector3 lastPosition = BB.transform.localPosition;
-					Quaternion lastRotation = BB.transform.localRotation;
-					machine.RotateBlock(BB.Guid, lastRotation * Quaternion.AngleAxis(deg, Vector3.forward));
-					machine.UndoSystem.AddAction(
-						new UndoActionRotate(machine, BB.Guid, lastPosition, lastPosition, BB.transform.localRotation, lastRotation)
-						);
-				}
-
 			}
 			public class SmallPropellerScript : AbstractPropellerScript
 			{
 				public SmallPropellerScript()
 				{
-					isPropeller = true;
-					isWoodenPanel = false;
 					angleFlat = 22.845f;
 				}
 				public override void SetBlockList()
@@ -1993,8 +2099,6 @@ namespace ABSspace
 			{
 				public PropellerScript()
 				{
-					isPropeller = true;
-					isWoodenPanel = false;
 					angleFlat = 23.06876f;
 				}
 				public override void SetBlockList()
@@ -2037,8 +2141,6 @@ namespace ABSspace
 			{
 				public Propeller52Script()
 				{
-					isPropeller = true;
-					isWoodenPanel = false;
 					angleFlat = 22.845f;
 				}
 				public override void SetBlockList()
@@ -2137,6 +2239,20 @@ namespace ABSspace
 			}
 			public class WoodenPanelScript : BlockExchangerScript
 			{
+				/// <summary>
+				/// ペラと木製パネルを交換するボタン
+				/// </summary>
+				public MToggle PPToggle;
+				/// <summary>
+				/// ペラと木製パネルの交換ボタンに記載される名称
+				/// </summary>
+				public string PPToggleLabel
+				{
+					get
+					{
+						return isJapanese ? "短プロペラに変更" : "Exchange to Propeller";
+					}
+				}
 				public override void SetBlockList()
 				{
 					ExchangeList = new List<BlockType>
@@ -2152,12 +2268,32 @@ namespace ABSspace
 						"Round Armor Plate",
 					};
 				}
-				public WoodenPanelScript()
-				{
-					isWoodenPanel = true;
-					isPropeller = false;
+                public override void SafeAwake()
+                {
+                    base.SafeAwake();
+
+					//プロペラ・パネル交換系
+					if (!StatMaster.isClient) PPToggle = BB.AddToggle(PPToggleLabel, "exchange-to-propeller", false);
 				}
-			}
+
+                public override void BuildingUpdate()
+                {
+                    base.BuildingUpdate();
+
+					// 短ペラ・ウッドパネル交換系
+					if (PPToggle.IsActive)
+					{
+						//プロペラとウッドパネルを交換する
+						PPToggle.IsActive = false;
+						machine.UndoSystem.Undo();
+						ChangeBlock(BlockType.SmallPropeller, Quaternion.AngleAxis(-90f, Vector3.left));
+					}
+				}
+                public override void ModifyBlockN()
+                {
+					ChangeBlock(BlockType.SmallPropeller, Quaternion.AngleAxis(-90f, Vector3.left));
+				}
+            }
 			public class ArmorPlateLargeScript : BlockExchangerScript
 			{
 				public override void SetBlockList()
@@ -2549,7 +2685,7 @@ namespace ABSspace
 		}
 		public abstract class ModBlockExchangerScript : BlockExchangerScript
 		{
-			//それぞれのmodのID
+			#region それぞれのmodのID
 			public static Guid SimpleMachinegunGuid = new Guid("1f5c7130-1eaa-47bc-ad1f-66586f68c9d6");
 			public static Guid BattleBullet1Guid = new Guid("72a20968-e89a-486a-a797-460e65a7df9e");
 			public static Guid BattleBullet2Guid = new Guid("0e746ba8-7cbe-4afd-95b6-a9f67e814f7e");
@@ -2563,8 +2699,12 @@ namespace ABSspace
 			public static Guid AnalogControllableBlocksGuid = new Guid("6a56a26c-5f7d-4dc5-b73d-7161060a8656");
 			public static Guid ShipsBlocksGuid = new Guid("68ea4a46-26cd-4a8e-8189-ffcbd96aeb9d");
 			public static Guid BoosterFuelGuid = new Guid("d1dffba4-cfa1-49c3-95a3-0a3094bbc517");
+			#endregion
 
-			//交換できるブロック群
+			#region 交換できるブロック群
+			/// <summary>
+			/// 水平に弾を撃ち出す機銃系ブロック
+			/// </summary>
 			public static List<ModBlockId> HorizontalWeapon
 			{
 				get
@@ -2596,6 +2736,9 @@ namespace ABSspace
 					return ret;
 				}
 			}
+			/// <summary>
+			/// 垂直に弾を撃ち出す機銃系ブロック
+			/// </summary>
 			public static List<ModBlockId> VerticalWeapon
 			{
 				get
@@ -2626,6 +2769,9 @@ namespace ABSspace
 					return ret;
 				}
 			}
+			/// <summary>
+			/// ミサイル
+			/// </summary>
 			public static List<ModBlockId> Missile
 			{
 				get
@@ -2650,7 +2796,10 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> Cruiser // 棒と推進系
+			/// <summary>
+			/// 船舶の構造材
+			/// </summary>
+			public static List<ModBlockId> Cruiser
 			{
 				get
 				{
@@ -2676,7 +2825,10 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> Ita // 板
+			/// <summary>
+			/// 板状ブロック
+			/// </summary>
+			public static List<ModBlockId> Ita
 			{
 				get
 				{
@@ -2701,6 +2853,9 @@ namespace ABSspace
 					return ret;
 				}
 			}
+			/// <summary>
+			/// チャフ
+			/// </summary>
 			public static List<ModBlockId> Chaff
 			{
 				get
@@ -2717,7 +2872,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon1 //120mm 152mm
+			/// <summary>
+			/// E砲その1
+			/// 120mm 152mm
+			/// </summary>
+			public static List<ModBlockId> ECannon1
 			{
 				get
 				{
@@ -2732,7 +2891,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon2 //88mm
+			/// <summary>
+			/// E砲その2
+			/// 88mm
+			/// </summary>
+			public static List<ModBlockId> ECannon2
 			{
 				get
 				{
@@ -2745,7 +2908,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon3 //75mm
+			/// <summary>
+			/// E砲その3
+			/// 75mm
+			/// </summary>
+			public static List<ModBlockId> ECannon3
 			{
 				get
 				{
@@ -2759,7 +2926,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon4 //45mm
+			/// <summary>
+			/// E砲その4
+			/// 45mm
+			/// </summary>
+			public static List<ModBlockId> ECannon4
 			{
 				get
 				{
@@ -2772,7 +2943,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon5 //12.7mm 20mm
+			/// <summary>
+			/// E砲その5
+			/// 12.7mm 20mm
+			/// </summary>
+			public static List<ModBlockId> ECannon5
 			{
 				get
 				{
@@ -2786,7 +2961,11 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ECannon6 //antenna Flag
+			/// <summary>
+			/// E砲その6
+			/// アンテナ 旗
+			/// </summary>
+			public static List<ModBlockId> ECannon6
 			{
 				get
 				{
@@ -2802,7 +2981,10 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> ModWheel // 車輪
+			/// <summary>
+			/// 車輪
+			/// </summary>
+			public static List<ModBlockId> ModWheel
             {
 				get
 				{
@@ -2819,7 +3001,10 @@ namespace ABSspace
 					return ret;
 				}
 			}
-			public static List<ModBlockId> FuelGenerator // インテーク
+			/// <summary>
+			/// インテーク
+			/// </summary>
+			public static List<ModBlockId> FuelGenerator
             {
                 get
                 {
@@ -2831,7 +3016,10 @@ namespace ABSspace
 					return ret;
                 }
             }
-			public static List<ModBlockId> FuelTank // タンク
+			/// <summary>
+			/// タンク
+			/// </summary>
+			public static List<ModBlockId> FuelTank
             {
                 get
                 {
@@ -2844,7 +3032,10 @@ namespace ABSspace
 					return ret;
                 }
             }
-			public static List<ModBlockId> Booster // ブースター（CUとBoosterAndFuel）
+			/// <summary>
+			/// ブースター（CUとBoosterAndFuel）
+			/// </summary>
+			public static List<ModBlockId> Booster
             {
                 get
                 {
@@ -2863,11 +3054,15 @@ namespace ABSspace
 					return ret;
                 }
             }
-			
-			public class ModBlockId //このmodブロックの情報
+			#endregion
+
+			/// <summary>
+			/// //このmodブロックの情報
+			/// </summary>
+			public class ModBlockId
 			{
-				//modブロックのローカルIDと名前の辞書
-				public Dictionary<int, string> SimpleMachinegunName;
+				#region modブロックのローカルIDと名前の辞書
+                public Dictionary<int, string> SimpleMachinegunName;
 				public Dictionary<int, string> BB1Name;
 				public Dictionary<int, string> BB2Name;
 				public Dictionary<int, string> BMissileName;
@@ -2880,37 +3075,62 @@ namespace ABSspace
 				public Dictionary<int, string> AnalogControllableBlocksName;
 				public Dictionary<int, string> ShipsBlocksName;
 				public Dictionary<int, string> BoosterFuelName;
-
+				#endregion
+				/// <summary>
+				/// このブロックのmod GUID
+				/// </summary>
 				public Guid ModId;
+				/// <summary>
+				/// このブロックのmod LocalID
+				/// </summary>
 				public int LocalId;
+				/// <summary>
+				/// ブロックの名前
+				/// </summary>
 				public string Name;
-				public List<ModBlockId> BlockGroup; //このブロックと交換可能なブロック群
-				public List<string> NameGroup; //このブロックと交換可能なブロック群の名前一覧
+				/// <summary>
+				/// BlockGroupをソートする際の順番
+				/// </summary>
+				public int order;
+				/// <summary>
+				/// このブロックと交換可能なブロック群
+				/// </summary>
+				public List<ModBlockId> BlockGroup;
+				/// <summary>
+				/// このブロックと交換可能なブロック群の名前一覧
+				/// </summary>
+				public List<string> NameGroup;
 				public ModBlockId(Guid modId, int localId)
 				{
 					ModId = modId;
 					LocalId = localId;
-					//ModConsole.Log("ModBlockId is constructed.");
+					order = 0;
 					SetName();
 				}
+				/// <summary>
+				/// 辞書の情報を元にブロックの名前を指定する
+				/// </summary>
 				public void SetName()
 				{
 					SetDictionary();
-					if (ModId == SimpleMachinegunGuid) { Name = SimpleMachinegunName[LocalId]; }
-					else if (ModId == BattleBullet1Guid) { Name = BB1Name[LocalId]; }
-					else if (ModId == BattleBullet2Guid) { Name = BB2Name[LocalId]; }
-					else if (ModId == BattleMissileGuid) { Name = BMissileName[LocalId]; }
-					else if (ModId == GuidedMissileGuid) { Name = GMissileName[LocalId]; }
-					else if (ModId == CruiserGuid) { Name = CruiserName[LocalId]; }
-					else if (ModId == ItaGuid) { Name = ItaName[LocalId]; }
-					else if (ModId == CUGuid) { Name = CUName[LocalId]; }
-					else if (ModId == LaserWeaponsGuid) { Name = LaserWeaponsName[LocalId]; }
-					else if (ModId == EsTankCannonGuid) { Name = EsTankCannonName[LocalId]; }
-					else if (ModId == AnalogControllableBlocksGuid) { Name = AnalogControllableBlocksName[LocalId]; }
-					else if (ModId == ShipsBlocksGuid) { Name = ShipsBlocksName[LocalId]; }
-					else if (ModId == BoosterFuelGuid) { Name = BoosterFuelName[LocalId]; }
+					if (ModId == SimpleMachinegunGuid)				Name = SimpleMachinegunName[LocalId];
+					else if (ModId == BattleBullet1Guid)			Name = BB1Name[LocalId];
+					else if (ModId == BattleBullet2Guid)			Name = BB2Name[LocalId];
+					else if (ModId == BattleMissileGuid)			Name = BMissileName[LocalId];
+					else if (ModId == GuidedMissileGuid)			Name = GMissileName[LocalId];
+					else if (ModId == CruiserGuid)					Name = CruiserName[LocalId];
+					else if (ModId == ItaGuid)						Name = ItaName[LocalId];
+					else if (ModId == CUGuid)						Name = CUName[LocalId];
+					else if (ModId == LaserWeaponsGuid)				Name = LaserWeaponsName[LocalId];
+					else if (ModId == EsTankCannonGuid)				Name = EsTankCannonName[LocalId];
+					else if (ModId == AnalogControllableBlocksGuid) Name = AnalogControllableBlocksName[LocalId];
+					else if (ModId == ShipsBlocksGuid)				Name = ShipsBlocksName[LocalId];
+					else if (ModId == BoosterFuelGuid)				Name = BoosterFuelName[LocalId];
 				}
-				public void SetGroup() //ブロックの名前と交換できるブロック群を設定する
+				/// <summary>
+				/// ブロックの名前と交換できるブロック群を設定する
+				/// </summary>
+				public void SetGroup()
 				{
 					BlockGroup = new List<ModBlockId>();
 					NameGroup = new List<string>();
@@ -3159,26 +3379,42 @@ namespace ABSspace
 								break;
                         }
                     }
+
 					//自身が交換可能リストに入っているハズなので、自分を消去する
-					//同時に、辞書に従ってNameGroupにブロック名を追加していく
 					int BlockGroupCount = BlockGroup.Count;
 					int IndexToRemove = 0;
 					for (int i=0; i < BlockGroupCount; i++)
 					{
+						BlockGroup[i].order = i;
 						if (ModId == BlockGroup[i].ModId && LocalId == BlockGroup[i].LocalId)
 						{
 							IndexToRemove = i;
-							continue;
 						}
-						NameGroup.Add(BlockGroup[i].Name);
 						//ModConsole.Log("Add : " + BlockGroup[i].Name);
 					}
 					BlockGroup.RemoveAt(IndexToRemove);
+
+					// 順繰りになるようソートする
+					for (int i=0; i<IndexToRemove; i++)
+                    {
+						// orderがIndexToRemoveより小さい場合はorderにcountを足す
+						BlockGroup[i].order += BlockGroup.Count;
+                    }
+					BlockGroup.Sort((a, b) => a.order - b.order);
+
+					// 名前を登録
+					for (int i=0; i<BlockGroup.Count; i++)
+                    {
+						NameGroup.Add(BlockGroup[i].Name);
+					}
 					if (BlockGroup.Count != NameGroup.Count)
 					{
-						Mod.LogWarning("BlockGroup.Count != NameGroup.Count");
+						Mod.Warning("BlockGroup.Count != NameGroup.Count");
 					}
 				}
+				/// <summary>
+				/// ブロックのローカルIDと名前の対応を作る
+				/// </summary>
 				public void SetDictionary()
 				{
 					SimpleMachinegunName = new Dictionary<int, string>()
@@ -3336,18 +3572,22 @@ namespace ABSspace
 				}
 			}
 
-			//このブロックのID情報
+			/// <summary>
+			/// このブロックのID情報
+			/// </summary>
 			public ModBlockId ThisModBlockId;
 
-			//2個目の交換ボタン等
+			/// <summary>
+			/// modブロック間の交換メニュー
+			/// </summary>
 			public MMenu MExchangeMenu;
+			/// <summary>
+			/// modブロック間の交換ボタン
+			/// </summary>
 			public MToggle MExchangeToggle;
-			
-			//交換後のmodブロック
-			public Block newMblock;
-			public BlockBehaviour newMBB;
 
-			public List<BlockType> Guns
+            #region 交換可能なバニラブロックの組合わせ
+            public List<BlockType> Guns
 			{
 				get
 				{
@@ -3431,7 +3671,9 @@ namespace ABSspace
 					};
                 }
             }
-			public List<string> GunsName
+            #endregion
+            #region 交換可能なバニラブロックの名称
+            public List<string> GunsName
 			{
 				get
 				{
@@ -3515,219 +3757,61 @@ namespace ABSspace
 					};
                 }
             }
-			public override void SetBlockList() //mod機銃が標準 //modブロックの種類によっては書き換わる
+			#endregion
+			/// <summary>
+			/// mod機銃が標準
+			/// modブロックの種類によっては書き換わる
+			/// </summary>
+			public override void SetBlockList()
 			{
 				ExchangeList = Guns;
 				ExchangeListMenu = GunsName;
 				ChangeBlockList(); //標準から書き換えたい場合
 			}
-			public override void ModBlockSafeAwake() //SafeAwake()中に呼び出される //何度も呼び出されている!? //ここでフリーズする //Groupをコンストラクタで作ってるからだった
+			public override void SafeAwake()
 			{
+				base.SafeAwake();
+
 				isModBlock = true;
 				SetModBlockId();
 				ThisModBlockId.SetGroup();
 
-				if (ThisModBlockId.BlockGroup.Count > 0)
+				if (ThisModBlockId.BlockGroup.Count > 0 && !StatMaster.isClient)
 				{
 					MExchangeMenu = BB.AddMenu("MExchangeMenu", 0, ThisModBlockId.NameGroup);
 					MExchangeToggle = BB.AddToggle(isJapanese ? "mod製ブロック交換" : "Exchange (mod Block)", "Exchange (mod Block)", false);
 				}			
 			}
-			public override void ModBlockBuildingUpdate() //Update()中に呼び出される
+			public override void BuildingUpdate()
 			{
+				base.BuildingUpdate();
+
 				if (isModBlock && MExchangeMenu != null && MExchangeToggle != null)
 				{
+					// →modブロック
 					if (MExchangeToggle.IsActive)
 					{
 						MExchangeToggle.IsActive = false;
-						//ModConsole.Log("UndoSystem.Undo()");
 						machine.UndoSystem.Undo();
-						//AddBlockはUndoで消えない //AddBlockの中にUndoActionAddが含まれている
-
-						//if (machine.AddBlock(BlockInfo.FromBlockBehaviour(newMBB)))
-						newMblock = PM.AddBlock(
-							ThisModBlockId.BlockGroup[MExchangeMenu.Value].ModId,
-						    ThisModBlockId.BlockGroup[MExchangeMenu.Value].LocalId,
-						    BB.transform.localPosition,
-						    BB.transform.localRotation,
-						    BB.Flipped);
-						//UndoやRedoを2回使わないといけない仕様は、たぶんしょうがない
-						if (newMblock != null) //条件文でブロックを追加 //たぶんこれがUndoに引っかかってる //PM系のメソッドだとUndoに引っかかる!?
-						{
-							//ModConsole.Log("TestLog01");
-							newMBB = newMblock.InternalObject;
-							newMBB.gameObject.transform.localScale = block.GameObject.transform.localScale; //スケールは揃える
-							//ModConsole.Log("TestLog02");
-							//machine.RemoveBlock(BB);
-							PM.RemoveBlock(block);
-							//newMBB.VisualController.PlaceFromBlock(newMBB);
-							newMBB.VisualController.ReplaceSkin(BB.VisualController.selectedSkin);
-							//これでスキンもそのまま移行できる
-							//machine.UndoSystem.AddAction(new UndoActionModBlockExchange(machine, BB, newBB));
-
-							newBB = newMblock.InternalObject;
-							
-							//if (newBB == null) { Debug.Log("ABS : newBB is null !"); } //出ない
-							//if (BB == null) { Debug.Log("ABS : BB is null !"); } //かならず出る
-							/*
-							machine.UndoSystem.AddActions(new List<UndoAction>
-							{
-								//この辺でFromBlockBehaviourがぬるぽ
-								new UndoActionRemove(machine, BlockInfo.FromBlockBehaviour(BB)),
-								new UndoActionAdd(machine, BlockInfo.FromBlockBehaviour(newBB)),
-							});
-							*/
-						}
-						/*
-						if (machine.AddBlock(BlockInfo.FromBlockBehaviour(newMBB), out blockBehaviour))
-						{
-							blockBehaviour.VisualController.PlaceFromBlock(newMBB);
-						}
-						if (machine.GetBlock(guid, out block))
-						{
-							machine.RemoveBlock(block);
-						}
-						public void ChangeBlock(BlockType BlockID) //指定したブロックと交換する
-						{
-							if (machine.AddBlock(new BlockInfo
-							{
-								ID = BlockID,
-								Position = BB.transform.localPosition,
-								Rotation = BB.transform.localRotation,
-								Scale = BB.transform.localScale,
-								Flipped = BB.Flipped,
-								Skin = BB.VisualController.selectedSkin,
-								BlockData = new XDataHolder()
-							}, out newBB))
-							{
-								newBB.VisualController.PlaceFromBlock(newBB);
-								machine.RemoveBlock(BB);
-							}
-							machine.UndoSystem.AddAction(new UndoActionExchange(machine, BlockInfo.FromBlockBehaviour(BB), BlockInfo.FromBlockBehaviour(newBB)));
-						}
-						*/
+						ChangeModBlock(ThisModBlockId.BlockGroup[MExchangeMenu.Value].ModId, ThisModBlockId.BlockGroup[MExchangeMenu.Value].LocalId);
 					}
 				}
 			}
-			/*
-			public class UndoActionModBlockExchange : UndoAction
-			{
-				BlockBehaviour BB;
-				BlockBehaviour newMBB;
-				Block b;
-				Block newMB;
 
-				Guid newGuid;
-
-				public UndoActionModBlockExchange(Machine m, BlockBehaviour BB, BlockBehaviour newMBB)
-				{
-					Debug.Log("UndoActionModBlockExchange : call");
-					this.BB = BB;
-					this.newMBB = newMBB;
-					b = Block.From(this.BB);
-					newMB = Block.From(this.newMBB);
-					changesCount = true;
-					machine = m;
-
-					guid = BB.Guid;
-					newGuid = newMBB.Guid;
-
-					Debug.Log("newMBB : " + this.newMBB.name);
-				}
-				public override bool Redo()
-				{
-					ModConsole.Log("Redo");
-					BlockBehaviour block;
-					BlockBehaviour blockBehaviour;
-					if (machine.AddBlock(BlockInfo.FromBlockBehaviour(newMBB), out blockBehaviour))
-					{
-						blockBehaviour.VisualController.PlaceFromBlock(newMBB);
-					}
-					if (machine.GetBlock(guid, out block))
-					{
-						machine.RemoveBlock(block);
-					}
-					return true;
-				}
-				public override bool Undo() //何らかのnullがある
-				{
-					ModConsole.Log("Undo");
-					BlockBehaviour blockBehaviour;
-					BlockBehaviour block;
-					if (machine.AddBlock(BlockInfo.FromBlockBehaviour(BB), out blockBehaviour))
-					{
-						blockBehaviour.VisualController.PlaceFromBlock(BB);
-					}
-					/*
-					if (machine.GetBlock(newGuid, out block))
-					{
-						machine.RemoveBlock(block);
-					}
-					
-					Debug.Log("元のブロック設置完了");
-					machine.RemoveBlock(newMBB);
-					Debug.Log("今のブロック消去完了");
-					return true;
-				}
-			}
-			*/
-			/*
-			 public class UndoActionExchange : UndoAction //AddとRemoveを組み合わせた形 //スケールやスキンも引き継ぐ //ステータスをコピペする
-			{
-				BlockInfo newInfo;
-				Guid newGuid;
-
-				public UndoActionExchange(Machine m, BlockInfo preInfo, BlockInfo newInfo)
-				{
-					Debug.Log("UndoActionExchange : called");
-					info = preInfo;
-					this.newInfo = newInfo;
-					guid = preInfo.Guid;
-					newGuid = newInfo.Guid;
-					changesCount = true;
-					machine = m;
-				}
-				public override bool Redo()
-				{
-					//ModConsole.Log("Redo");
-					BlockBehaviour block;
-					BlockBehaviour blockBehaviour;
-					Debug.Log("Redo : start");
-					if (machine.AddBlock(newInfo, out blockBehaviour))
-					{
-						blockBehaviour.VisualController.PlaceFromBlockInfo(newInfo);
-					}
-					Debug.Log("Redo : mid");
-					if (machine.GetBlock(guid, out block))
-					{
-			machine.RemoveBlock(block);
-					}
-		Debug.Log("Redo : end");
-					return true;
-				}
-	public override bool Undo()
-	{
-		//ModConsole.Log("Undo");
-		BlockBehaviour blockBehaviour;
-		BlockBehaviour block;
-		Debug.Log("Undo : start");
-		if (machine.AddBlock(info, out blockBehaviour))
-		{
-			blockBehaviour.VisualController.PlaceFromBlockInfo(info);
-		}
-		Debug.Log("Undo : mid");
-		if (machine.GetBlock(newGuid, out block))
-		{
-			machine.RemoveBlock(block);
-		}
-		Debug.Log("Undo : end");
-		return true;
-	}
-			 */
-
-			public abstract void SetModBlockId(); //IdOfThisを初期化する //IdOfThis = new ModBlockId(hoge, hoge);
-			public virtual void ChangeBlockList() { } //変換できるバニラブロックを書き換えたい場合にオーバーライドする
-		}
+			/// <summary>
+			/// IdOfThisを初期化する
+			/// IdOfThis = new ModBlockId(hoge, hoge);
+			/// </summary>
+			public abstract void SetModBlockId();
+			/// <summary>
+			/// 変換できるバニラブロックを書き換える
+			/// </summary>
+			public virtual void ChangeBlockList() { }
+            public override void ModifyBlockN()
+            {
+				ChangeModBlock(ThisModBlockId.BlockGroup[0].ModId, ThisModBlockId.BlockGroup[0].LocalId);
+            }
+        }
 		namespace ModBlocks
 		{
 			#region  オトカム砲

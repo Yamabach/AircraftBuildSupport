@@ -9,10 +9,19 @@ namespace ABSspace
 {
 	public class Mod : ModEntryPoint
 	{
+		/// <summary>
+		/// 日本語化されているかどうか
+		/// </summary>
 		public static bool isJapanese = SingleInstance<LocalisationManager>.Instance.currLangName.Contains("日本語");
 		public static GameObject mod;
-		public static bool Extended = false; //NoBounds等がロードされているか
-		public static BlockGrouping.GroupLabel blockGroup; // ブロックのラベル
+		/// <summary>
+		/// NoBounds等がロードされているか
+		/// </summary>
+		public static bool Extended = false;
+		/// <summary>
+		/// ブロックのラベル
+		/// </summary>
+		public static BlockGrouping.GroupLabel blockGroup;
 		//public static EntityController.GroupLabel entityGroup; // エンティティのラベル
 
 		public override void OnLoad()
@@ -30,9 +39,13 @@ namespace ABSspace
 			// xml読み込み
 			blockGroup = BlockGrouping.XMLDeserializer.Deserialize();
 			//entityGroup = EntityController.XMLDeserializer.Deserialize();
-
 		}
 
+		/// <summary>
+		/// PNG投影機にスクリプト貼り付け
+		/// </summary>
+		/// <param name="entityId"></param>
+		/// <param name="prefab"></param>
 		public override void OnEntityPrefabCreation(int entityId, GameObject prefab)
 		{
 			switch (entityId)
@@ -43,6 +56,9 @@ namespace ABSspace
 			}
 		}
 		
+		/// <summary>
+		/// 限凸スケーリング環境かどうか確認
+		/// </summary>
 		public static void CheckExtended()
 		{
 			Extended =
@@ -55,15 +71,18 @@ namespace ABSspace
 		{
 			Debug.Log("ABS Log : " + message);
 		}
-		public static void LogWarning(string message)
+		public static void Warning(string message)
 		{
 			Debug.LogWarning("ABS Warning : " + message);
 		}
-		public static void LogError(string message)
+		public static void Error(string message)
 		{
 			Debug.LogError("ABS Error : " + message);
 		}
-		// スタブロを取得する
+		/// <summary>
+		/// スタブロを取得する
+		/// </summary>
+		/// <returns></returns>
 		public static BlockBehaviour GetStartingBlock() //スタブロを参照するのはちょっと危ないかも？（マルチとか）
 		{
 			Machine machine = Machine.Active();

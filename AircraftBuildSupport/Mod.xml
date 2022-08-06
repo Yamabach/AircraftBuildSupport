@@ -7,9 +7,9 @@
 
 	<!-- General information about the mod. -->
 	<Name>Aircraft Build Support</Name>
-	<Author>Yamabach</Author> <!-- FIX: Insert your name here. -->
+	<Author>yamabach</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>1.13.1</Version>
+	<Version>2.0.0</Version>
 	
 	<Description>
 Add some useful features for aircraft lovers <!-- FIX: Insert a short description here. -->
@@ -132,14 +132,14 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
     <Texture name="PngProjectorTex" path="PngProjectorEntity\PngProjectorThumbnail.png"/>
     
     <!--リバースブロック-->
-		<Mesh name="grabberMesh" path="VanillaBlocks\Grabber\grabber.obj"/>
-		<Texture name="grabberTex" path="VanillaBlocks\Grabber\grabbertex_png.png"/>
+	<Mesh name="grabberMesh" path="VanillaBlocks\Grabber\grabber.obj"/>
+	<Texture name="grabberTex" path="VanillaBlocks\Grabber\grabbertex_png.png"/>
     
-		<Mesh name="hingeMesh" path="VanillaBlocks\Hinge\hinge.obj"/>
-		<Texture name="hingeTex" path="VanillaBlocks\Hinge\HingeJoint.png"/>
+	<Mesh name="hingeMesh" path="VanillaBlocks\Hinge\hinge.obj"/>
+	<Texture name="hingeTex" path="VanillaBlocks\Hinge\HingeJoint.png"/>
     
-		<Mesh name="propellerMesh" path="VanillaBlocks\Propeller\propeller.obj"/>
-		<Texture name="propellerTex" path="VanillaBlocks\Propeller\propellertex_png.png"/>
+	<Mesh name="propellerMesh" path="VanillaBlocks\Propeller\propeller.obj"/>
+	<Texture name="propellerTex" path="VanillaBlocks\Propeller\propellertex_png.png"/>
 
     <Mesh name="logMesh" path="VanillaBlocks\Log\log.obj"/>
     <Texture name="logTex" path="VanillaBlocks\Log\logtex_png.png"/>

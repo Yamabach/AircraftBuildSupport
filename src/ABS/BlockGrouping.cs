@@ -11,12 +11,19 @@ using System.Xml.Serialization;
 
 namespace ABSspace
 {
+    /// <summary>
+    /// ブロックの組を1つの塊として扱うための名前空間
+    /// </summary>
     namespace BlockGrouping
     {
-        // ブロックの選択を拡張し、あるタグのブロックを選択すると、そのタグ全てのブロックを選択するようにする
+        /// <summary>
+        /// ブロックの選択を拡張し、あるタグのブロックを選択すると、そのタグ全てのブロックを選択するようにする
+        /// </summary>
         public class BlockGroupingManager : SingleInstance<BlockGroupingManager>
         {
-            // 選択を有効化するツールのリスト
+            /// <summary>
+            /// 選択を有効化するツールのリスト
+            /// </summary>
             private readonly List<StatMaster.Tool> toolList = new List<StatMaster.Tool>
             {
                 StatMaster.Tool.Translate,
@@ -28,7 +35,10 @@ namespace ABSspace
             {
                 get { return "Block Grouping Manager"; }
             }
-            public static bool isGrouping = false; // グループ化させる
+            /// <summary>
+            /// グループ化させる
+            /// </summary>
+            public static bool isGrouping = false;
 
             public void Update()
             {
@@ -40,10 +50,12 @@ namespace ABSspace
                 }
             }
 
-            // 選択するブロックを選ぶ
+            /// <summary>
+            /// 選択するブロックを選ぶ
+            /// </summary>
+            /// <returns></returns>
             private List<BlockBehaviour> GetBlockList()
             {
-                //Mod.Log("GetBlockList has been invoked");
                 // 現在選択中のブロック
                 List<BlockBehaviour> current = AdvancedBlockEditor.Instance.selectionController.MachineSelection;
                 // これから選択するブロック
@@ -78,7 +90,6 @@ namespace ABSspace
                     BlockExchangerScript component = block.GetComponent<BlockExchangerScript>();
                     if (component == null)
                     {
-                        //Mod.LogError("BlockExchagnerScript not found! 1");
                         continue;
                     }
                     if (!group.Contains(component.groupLabel))
@@ -103,7 +114,10 @@ namespace ABSspace
                 return result;
             }
 
-            // ブロックを選択する
+            /// <summary>
+            /// ブロックを選択する
+            /// </summary>
+            /// <param name="list"></param>
             private void SelectBlocks(List<BlockBehaviour> list)
             {
                 // 移動、回転、スケール、対称以外なら何もしない
@@ -126,6 +140,9 @@ namespace ABSspace
                 }
             }
         }
+        /// <summary>
+        /// xmlファイルから名前データを取り出す
+        /// </summary>
         public class XMLDeserializer
         {
             public static readonly string FileName = "name.xml";
@@ -143,7 +160,9 @@ namespace ABSspace
                 return Modding.ModIO.DeserializeXml<GroupLabel>(ResourcesPath + FileName);
             }
         }
-
+        /// <summary>
+        /// 名前データ
+        /// </summary>
         [XmlRoot("block-group")]
         public class GroupLabel : Element
         {

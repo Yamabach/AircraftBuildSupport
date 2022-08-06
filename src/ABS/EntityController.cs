@@ -22,7 +22,7 @@ namespace ABSspace
 
             public void Awake()
             {
-                Events.OnEntityPlaced += new Action<Entity>(AddScript);
+                //Events.OnEntityPlaced += new Action<Entity>(AddScript);
             }
             public void AddScript(Entity entity)
             {

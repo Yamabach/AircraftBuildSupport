@@ -8,22 +8,46 @@ using UnityEngine;
 
 namespace ABSspace
 {
+	/// <summary>
+	/// ABSで追加されるエンティティに関する名前空間
+	/// </summary>
 	namespace EntityController
 	{
-		
+		/// <summary>
+		/// png投影機
+		/// </summary>
 		public class PngProjectorScript : MonoBehaviour
 		{
 			public bool isJapanese = Mod.isJapanese;
 			public bool hasImageFile = false;
 			private GenericEntity GE;
+			/// <summary>
+			/// 画像フォルダを開くボタン
+			/// </summary>
 			private MToggle OpenDirectoryToggle;
+			/// <summary>
+			/// 画像を変更するボタン
+			/// </summary>
 			private MToggle ChangeToggle;
+			/// <summary>
+			/// 画像を選択するメニュー
+			/// </summary>
 			private MMenu ChangeMenu;
-
+			/// <summary>
+			/// x軸方向のオフセット
+			/// </summary>
 			private MSlider OffsetX;
+			/// <summary>
+			/// y軸方向のオフセット
+			/// </summary>
 			private MSlider OffsetY;
+			/// <summary>
+			/// z軸方向のオフセット
+			/// </summary>
 			private MSlider Offset;
-
+			/// <summary>
+			/// 画像ファイル名
+			/// </summary>
 			private List<string> items;
 
 			private string FolderName
@@ -40,13 +64,21 @@ namespace ABSspace
 					return Application.dataPath + "/Mods/Data/AircraftBuildSupport_a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2/" + FolderName;
 				}
 			}
-			
+			/// <summary>
+			/// 画像のゲームオブジェクト
+			/// </summary>
 			private GameObject Screen;
+			/// <summary>
+			/// 読み込んだ画像データ
+			/// </summary>
 			private List<Sprite> Images;
+			/// <summary>
+			/// スプライト描画コンポーネント
+			/// </summary>
 			private SpriteRenderer SR;
 
 			public void Awake()
-				//レベルロード時に限り、画像の大きさがエンティティのスケール倍になる不具合
+			//レベルロード時に限り、画像の大きさがエンティティのスケール倍になる不具合
 			{
 				//ModConsole.Log("PngProjector : load");
 				if (Game.IsSimulating)
@@ -146,6 +178,10 @@ namespace ABSspace
 					
 				}
 			}
+			/// <summary>
+			/// 投影する画像を変更する
+			/// </summary>
+			/// <param name="index"></param>
 			public void ChangeImage(int index = 0)
 			{
 				SR.sprite = Images[index];
@@ -161,8 +197,16 @@ namespace ABSspace
 			}
 		}
 		
+		/// <summary>
+		/// 便利関数置き場
+		/// </summary>
 		public static class Util
 		{
+			/// <summary>
+			/// byte列から画像を生成
+			/// </summary>
+			/// <param name="bytes"></param>
+			/// <returns></returns>
 			public static Sprite CreateSpriteFromBytes(byte[] bytes)
 			{
 				//横サイズの判定
