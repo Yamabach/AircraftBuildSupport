@@ -77,13 +77,21 @@ namespace ABSspace
 			/// </summary>
 			public int CurrentUnit = 0;
 			/// <summary>
+			/// ブロックの角速度の単位を切り替えるボタン用
+			/// </summary>
+			public bool AngularVelocityUnitChange = false;
+			/// <summary>
+			/// 現在のブロックの角速度の単位のindex
+			/// </summary>
+			public int AngularVelocityCurrentUnit = 0;
+			/// <summary>
 			/// 現在カーソル上にあるブロック
 			/// </summary>
-			public static BlockBehaviour picked;
+			public BlockController.BlockExchangerScript picked;
 			/// <summary>
 			/// 単位の名称
 			/// </summary>
-			public static readonly string[] UnitName = new string[]
+			public readonly string[] UnitName = new string[]
 			{
 				"m/s", 
 				"km/h", 
@@ -93,12 +101,30 @@ namespace ABSspace
 			/// <summary>
 			/// 単位ごとの倍率
 			/// </summary>
-			public static readonly float[] Coefficient = new float[]
+			public readonly float[] Coefficient = new float[]
 			{
 				1f,
 				3.6f,
 				1.9438f,
 				0.00293866987f,
+			};
+			/// <summary>
+			/// 単位の名称
+			/// </summary>
+			public readonly string[] AngularVelocityUnitName = new string[]
+			{
+				"deg/s",
+				"RPS",
+				"RPM",
+			};
+			/// <summary>
+			/// 単位ごとの倍率
+			/// </summary>
+			public readonly float[] AngularVelocityCoefficient = new float[]
+			{
+				1f,
+				0.0027777777778f,
+				0.00004629629f,
 			};
 			/// <summary>
 			/// スタブロ
@@ -112,10 +138,6 @@ namespace ABSspace
 			/// GUIのウィンドウID
 			/// </summary>
 			private int windowId;
-			/// <summary>
-			/// ミサイルコスト表示（ミサイル系mod導入時のみ）
-			/// </summary>
-			public bool ShowMissileCost = false;
 			/// <summary>
 			/// 実際に空力中心を表示するかどうか
 			/// </summary>
@@ -212,6 +234,14 @@ namespace ABSspace
 						CurrentUnit = 0;
 					}
 				}
+				if (AngularVelocityUnitChange)
+                {
+					AngularVelocityCurrentUnit++;
+					if (AngularVelocityCurrentUnit >= AngularVelocityUnitName.Length)
+                    {
+						AngularVelocityCurrentUnit = 0;
+                    }
+                }
 			}
 			public void FixedUpdate()
 			{
@@ -245,6 +275,12 @@ namespace ABSspace
 					velocity = (position - prevPosition).magnitude / Time.fixedDeltaTime;
 				}
 				prevPosition = position;
+
+				// 回転
+				if (startingBlockScript != null)
+                {
+					Instance.transform.rotation = startingBlockScript.frontObject.transform.rotation;
+                }
 			}
 			
 			public void OnGUI()
@@ -257,14 +293,14 @@ namespace ABSspace
 				GUI.skin.label.fontSize = fontSize;
 				if (!StatMaster.isMainMenu && !StatMaster.inMenu && !hide && Machine.Active() != null)
 				{
-					windowRect.height = 200 + labelHeight * ((ShowAxis ? 1 : 0f) + (ShowCoM ? 1 : 0f) + (ShowTransform ? 4 : 0f) + (ShowMissileCost ? 1 : 0f));
+					windowRect.height = 200 + labelHeight * ((ShowAxis ? 1 : 0f) + (ShowCoM ? 1 : 0f) + (ShowTransform ? 5.5f : 0f) + (Mod.Missile ? 1 : 0f));
 					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, "ABS 1.3.0 Lennon"); //Lennonは1.3のコードネーム
 					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, "ABS 1.5.0 McCartney"); //McCarteneyは1.4のコードネーム
 					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, "ABS 1.6.1 Harrison"); //Harrisonは1.6のコードネーム
 					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, "ABS 1.6.2 Harrison" + (Mod.Extended ? " Extended" : "")); //Harrisonは1.6のコードネーム
-					windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, $"ABS {Mods.GetVersion(new Guid("a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2"))} Starr {(Mod.Extended ? " Extended" : "")}"); //Starrは1.7のコードネーム
-					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, 
-					//	"ABS " + Mods.GetVersion(new Guid("a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2")).ToString() + " Preston" + (Mod.Extended ? " Extended" : "")); //Prestonは1.13のコードネーム
+					//windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, $"ABS {Mods.GetVersion(new Guid("a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2"))} Starr {(Mod.Extended ? " Extended" : "")}"); //Starrは1.7のコードネーム
+					windowRect = GUILayout.Window(windowId, windowRect, AxisMapper, 
+						$"ABS {Mods.GetVersion(new Guid("a7f2f9ae-e11f-41ff-a5dd-28ab14eaa6a2"))} Preston{(Mod.Extended ? " Extended" : "")}"); //Prestonは2.0.0のコードネーム
 				}
 			}
 			/// <summary>
@@ -295,60 +331,77 @@ namespace ABSspace
 				ShowLiftVectors = GUILayout.Toggle(ShowLiftVectors, "    ");
 				GUILayout.EndHorizontal();
 
-				GUILayout.BeginHorizontal();
-				{
-					GUILayout.Label(isJapanese ? "マシン重量" : "Machine total mass");
-					GUILayout.Label(Machine.Active().Mass.ToString());
-				}
+                #region mass
+                GUILayout.BeginHorizontal();
+				GUILayout.Label(isJapanese ? "マシン重量" : "Machine total mass");
+				GUILayout.Label(Machine.Active().Mass.ToString());
 				GUILayout.EndHorizontal();
-				
-				GUILayout.BeginHorizontal();
-				{
-					GUILayout.Label(isJapanese ? "スタブロ速さ" : "Speed");
-					GUILayout.FlexibleSpace();
-					GUILayout.Label(Game.IsSimulating ? ((float)Math.Round(velocity * Coefficient[CurrentUnit], 1)).ToString() : "0.0");
-					VelocityUnitChange = GUILayout.Button(UnitName[CurrentUnit]);
-				}
-				GUILayout.EndHorizontal();
+                #endregion
 
-				GUILayout.BeginHorizontal();
-				{
-					GUILayout.Label(isJapanese ? "プロペラ枚数" : "Propellers");
-					GUILayout.FlexibleSpace();
-					GUILayout.Label(NumOfPropellers().ToString()); //長短プロペラの枚数
-				}
+                #region velocity
+                GUILayout.BeginHorizontal();
+				GUILayout.Label(isJapanese ? "スタブロ速さ" : "Speed");
+				GUILayout.FlexibleSpace();
+				GUILayout.Label(Game.IsSimulating ? ((float)Math.Round(velocity * Coefficient[CurrentUnit], 1)).ToString() : "0.0");
+				VelocityUnitChange = GUILayout.Button(UnitName[CurrentUnit]);
 				GUILayout.EndHorizontal();
+                #endregion
 
+                #region propellers
+                GUILayout.BeginHorizontal();
+				GUILayout.Label(isJapanese ? "プロペラ枚数" : "Propellers");
+				GUILayout.FlexibleSpace();
+				GUILayout.Label(NumOfPropellers().ToString()); //長短プロペラの枚数
+				GUILayout.EndHorizontal();
+				#endregion
+
+				// transform information
 				ToggleIndent(isJapanese ? "トランスフォームを表示" : "Show Transform", 10f, ref ShowTransform, delegate
 				{
+					#region 選択中のブロック
 					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Label(isJapanese ? "選択中のブロック" : "Picked Block");
-						GUILayout.FlexibleSpace();
-						GUILayout.Label(picked == null ? "-" : picked.name);
-					}
+					GUILayout.Label(isJapanese ? "選択中のブロック" : "Picked Block");
+					GUILayout.FlexibleSpace();
+					GUILayout.Label(picked == null ? "-" : picked.name);
 					GUILayout.EndHorizontal();
+					#endregion
+
+					#region position
 					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Label(isJapanese ? "位置" : "Position"); GUILayout.FlexibleSpace(); GUILayout.Label(picked != null ? picked.gameObject.transform.localPosition.ToString() : "(-, -, -)");
-					}
+					GUILayout.Label(isJapanese ? "位置" : "Position");
+					GUILayout.FlexibleSpace();
+					GUILayout.Label(picked != null ? picked.gameObject.transform.localPosition.ToString() : "(-, -, -)");
 					GUILayout.EndHorizontal();
+					#endregion
+
+					#region rotation
 					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Label(isJapanese ? "姿勢" : "Rotation"); GUILayout.FlexibleSpace(); GUILayout.Label(picked != null ? picked.gameObject.transform.localRotation.eulerAngles.ToString() : "(-, -, -)");
-					}
+					GUILayout.Label(isJapanese ? "姿勢" : "Rotation");
+					GUILayout.FlexibleSpace();
+					GUILayout.Label(picked != null ? picked.gameObject.transform.localRotation.eulerAngles.ToString() : "(-, -, -)");
 					GUILayout.EndHorizontal();
+					#endregion
+
+					#region scale
 					GUILayout.BeginHorizontal();
-					{
-						GUILayout.Label(isJapanese ? "縮尺" : "Local Scale"); GUILayout.FlexibleSpace(); GUILayout.Label(picked != null ? picked.gameObject.transform.localScale.ToString() : "(-, -, -)");
-					}
+					GUILayout.Label(isJapanese ? "縮尺" : "Local Scale");
+					GUILayout.FlexibleSpace();
+					GUILayout.Label(picked != null ? picked.gameObject.transform.localScale.ToString() : "(-, -, -)");
 					GUILayout.EndHorizontal();
+					#endregion
+
+					#region angular velocity
+					GUILayout.BeginHorizontal();
+					GUILayout.Label(isJapanese ? "角速度" : "Angular Velocity");
+					GUILayout.FlexibleSpace();
+					GUILayout.Label(picked != null ? ((float)Math.Round(picked.anglularVelocity * AngularVelocityCoefficient[AngularVelocityCurrentUnit], 1)).ToString() : "0.0");
+					AngularVelocityUnitChange = GUILayout.Button(AngularVelocityUnitName[AngularVelocityCurrentUnit]);
+					GUILayout.EndHorizontal();
+					#endregion
 				});
 
-				ShowMissileCost =
-					Mods.IsModLoaded(new Guid("90a17943-af2a-40ea-a51f-530553b9fcb0")) //誘導ミサイルmodがロードされている場合
-					|| Mods.IsModLoaded(new Guid("15259577-bd19-4397-8646-88d235cf8d24")); //LaserWeapons
-				if (ShowMissileCost)
+				// missile cost
+				if (Mod.Missile)
 				{
 					GUILayout.BeginHorizontal();
 					GUILayout.Label(isJapanese ? "誘導ミサイルコスト" : "Missile Cost");
@@ -609,10 +662,6 @@ namespace ABSspace
 				if (Game.IsSimulating)
 				{
 					StartingBlockSimulation = GetStartingBlock();
-					if (CoLGUI.Instance.startingBlockScript != null)
-					{
-						AxisController.transform.rotation = CoLGUI.Instance.startingBlockScript.frontObject.transform.rotation;
-					}
 				}
 				else
 				{
@@ -620,7 +669,6 @@ namespace ABSspace
 					{
 						StartingBlockBuild = GetStartingBlock();
 					}
-					AxisController.transform.localRotation = Quaternion.identity;
 				}
 			}
 			/// <summary>
@@ -872,23 +920,12 @@ namespace ABSspace
 				if (Game.IsSimulating)
 				{
 					StartingBlockSimulation = GetStartingBlock();
-					for (int i = 0; i < 3; i++)
-                    {
-						if (CoLGUI.Instance.startingBlockScript != null)
-						{
-							AxisController[i].transform.rotation = CoLGUI.Instance.startingBlockScript.frontObject.transform.rotation;
-						}
-					}
 				}
 				else
 				{
 					if (StartingBlockBuild == null)
 					{
 						StartingBlockBuild = GetStartingBlock();
-					}
-					for (int i = 0; i < 3; i++)
-					{
-						AxisController[i].transform.localRotation = Quaternion.identity;
 					}
 				}
 			}

@@ -17,7 +17,22 @@ namespace ABSspace
 		/// <summary>
 		/// NoBounds等がロードされているか
 		/// </summary>
-		public static bool Extended = false;
+		public static bool Extended
+		{
+			get
+			{
+				return Mods.IsModLoaded(new Guid("7062baee-484e-4cdd-8750-b4baa7b964e5")) //NoBounds
+				|| Mods.IsModLoaded(new Guid("bb7ba333-e72b-49a8-8c0d-011a3fcadaf3")) //EasyScale
+				;
+			}
+		}
+		public static bool Missile
+        {
+            get
+            {
+				return Mods.IsModLoaded(new Guid("90a17943-af2a-40ea-a51f-530553b9fcb0")) || Mods.IsModLoaded(new Guid("15259577-bd19-4397-8646-88d235cf8d24"));
+			}
+        }
 		/// <summary>
 		/// ブロックのラベル
 		/// </summary>
@@ -54,17 +69,6 @@ namespace ABSspace
 					prefab.AddComponent<EntityController.PngProjectorScript>();
 					break;
 			}
-		}
-		
-		/// <summary>
-		/// 限凸スケーリング環境かどうか確認
-		/// </summary>
-		public static void CheckExtended()
-		{
-			Extended =
-				Mods.IsModLoaded(new Guid("7062baee-484e-4cdd-8750-b4baa7b964e5")) //NoBounds
-				|| Mods.IsModLoaded(new Guid("bb7ba333-e72b-49a8-8c0d-011a3fcadaf3")) //EasyScale
-				;
 		}
 
 		public static void Log(string message)

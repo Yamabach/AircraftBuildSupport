@@ -28,7 +28,13 @@ namespace ABSspace
 		/// </summary>
 		public class BlockSelector : SingleInstance<BlockSelector>
 		{
-			public override string Name { get; }
+			public override string Name
+            {
+                get
+                {
+					return "Block Selector";
+                }
+            }
 			internal PlayerMachineInfo PMI { get; set; }
 			/// <summary>
 			/// バニラブロックとそれに割り当てるコンポーネントの組
@@ -954,7 +960,7 @@ namespace ABSspace
 						return;
 				}
 			}
-			public void OnMouseOver()
+			public virtual void OnMouseOver()
 			{
 				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
@@ -980,7 +986,10 @@ namespace ABSspace
 				{
 					ModifyBlockN();
 				}
-				CoLController.CoLGUI.picked = BB; // トランスフォーム表示用
+				if (Input.GetKeyDown(KeyCode.R) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				{
+					ModifyBlockR();
+				}
 			}
 
 			//ショートカット系
@@ -1008,6 +1017,10 @@ namespace ABSspace
 			/// Nキーが押された時に呼び出す
 			/// </summary>
 			public virtual void ModifyBlockN() { }
+			/// <summary>
+			/// Rキーが押された時に呼び出す
+			/// </summary>
+			public virtual void ModifyBlockR() { }
 
 			public AbstractBlockScript()
 			{
@@ -1043,6 +1056,38 @@ namespace ABSspace
 			/// マシン
 			/// </summary>
 			public Machine machine;
+			/// <summary>
+			/// このブロックが自身のものであるかどうか
+			/// </summary>
+			public bool IsMyMachine
+            {
+                get
+                {
+					return machine == Machine.Active() || !StatMaster.isMP;
+                }
+            }
+			/// <summary>
+			/// 現在の角度
+			/// </summary>
+			public Quaternion rotation = Quaternion.identity;
+			/// <summary>
+			/// 1つ前の角度
+			/// </summary>
+			public Quaternion lastRotation = Quaternion.identity;
+			/// <summary>
+			/// 角速度
+			/// </summary>
+			public float anglularVelocity = 0f;
+			/// <summary>
+			/// ブロックの設置点から中心までの長さ
+			/// </summary>
+			public virtual float HalfLength
+            {
+                get
+                {
+					return Vector3.Magnitude(transform.position - BB.GetCenter());
+                }
+            }
 
 			// ブロック交換系UI
 			/// <summary>
@@ -1105,7 +1150,6 @@ namespace ABSspace
 				block = Block.From(BB);
 				PM = block.Machine;
 				machine = Machine.Active();
-				Mod.CheckExtended(); //再チェック
 
 				//ブロック交換系
 				SetBlockList();
@@ -1126,7 +1170,7 @@ namespace ABSspace
 					BB = gameObject.GetComponent<BlockBehaviour>();
 					Mod.Log($"BuildingUpdate BB is {BB != null}"); // 出てこない
                 }
-				if (ExchangeList.Count > 0)
+				if (ExchangeList.Count > 0 && !StatMaster.isClient)
 				{
 					if (ExchangeToggle.IsActive)
 					{
@@ -1140,13 +1184,31 @@ namespace ABSspace
 						ChangeBlock(ExchangeList[ExchangeMenu.Value]);
 					}
 				}
-			}
 
-			//ブロック交換系
-			/// <summary>
-			/// ExchangeListとExchangeListMenu
-			/// </summary>
-			public abstract void SetBlockList();
+				// 角速度は0を返す
+				anglularVelocity = 0f;
+			}
+            public override void SimulateFixedUpdateAlways()
+            {
+                base.SimulateFixedUpdateAlways();
+
+				// 角速度計算
+				rotation = transform.rotation;
+				if (rotation == null || lastRotation == null)
+                {
+					anglularVelocity = 0f;
+                }
+				Vector3 axis;
+				(Quaternion.Inverse(lastRotation) * rotation).ToAngleAxis(out anglularVelocity, out axis);
+				anglularVelocity /= Time.fixedDeltaTime;
+				lastRotation = rotation;
+            }
+
+            //ブロック交換系
+            /// <summary>
+            /// ExchangeListとExchangeListMenu
+            /// </summary>
+            public abstract void SetBlockList();
 			/// <summary>
 			/// 指定したブロックと交換する
 			/// </summary>
@@ -1321,6 +1383,26 @@ namespace ABSspace
             {
 				ChangeBlock(ExchangeList[0]);
             }
+			/// <summary>
+			/// ブロック反転
+			/// </summary>
+            public override void ModifyBlockR()
+            {
+				Vector3 lastPos = transform.localPosition;
+				Quaternion lastRot = transform.localRotation;
+				transform.position += transform.forward * HalfLength * 2f;
+				transform.rotation = Quaternion.LookRotation(-transform.forward, transform.up);
+				machine.UndoSystem.AddActions(new List<UndoAction>
+				{
+					new UndoActionMove(machine, BB.Guid, transform.localPosition, lastPos),
+					new UndoActionRotate(machine, BB.Guid, transform.localPosition, lastPos, transform.localRotation, lastRot),
+				});
+			}
+            public override void OnMouseOver()
+            {
+                base.OnMouseOver();
+				CoLController.CoLGUI.Instance.picked = this; // トランスフォーム表示用
+			}
         }
 		
 		namespace VanillaBlocks
@@ -1338,7 +1420,7 @@ namespace ABSspace
 					base.SafeAwake();
 
 					// メニューなら何もしない
-					if (machine == null) return;
+					if (machine == null && BB.isSimulating && !IsMyMachine) return;
 
 					// 空力中心軸と重心の軸のためのゲームオブジェクト
 					if (frontObject == null)
@@ -1354,29 +1436,21 @@ namespace ABSspace
                 {
                     base.BuildingUpdate();
 
+					if (!IsMyMachine) return;
+
 					// ボックスと同じ方向にする
 					if (StatMaster.isMP)
 					{
-						frontObject.transform.rotation = machine.boundingBoxController.transform.rotation; // (machine as ServerMachine).player.buildZone.transform.rotation;
-						//Mod.Log($"{Quaternion.Angle(frontObject.transform.rotation, (machine as ServerMachine).player.buildZone.transform.rotation)}"); // 0
+						frontObject.transform.rotation = (machine as ServerMachine).player.buildZone.transform.rotation;
 					}
 					else
 					{
 						frontObject.transform.rotation = Quaternion.identity;
 					}
+
+					// ビルド中のものを優先する
+					CoLController.CoLGUI.Instance.startingBlockScript = this;
 				}
-                public override void OnSimulateStart()
-                {
-					if (StatMaster.isMP)
-					{
-						frontObject.transform.rotation = Quaternion.Lerp(machine.boundingBoxController.transform.rotation, Quaternion.identity, 0.5f);
-						Mod.Log($"{Quaternion.Angle(frontObject.transform.rotation, (machine as ServerMachine).player.buildZone.transform.rotation)}"); // 0
-					}
-                    else
-                    {
-						frontObject.transform.rotation = Quaternion.identity;
-                    }
-                }
             }
             public abstract class AbstractShortenableBlockScript : BlockExchangerScript
 			{
@@ -1406,8 +1480,15 @@ namespace ABSspace
 						return isJapanese ? "長さ変更（G）" : "Change Length (G)";
 					}
 				}
+                public override float HalfLength
+                {
+                    get
+                    {
+						return isShortened ? base.HalfLength - 0.5f : base.HalfLength;
+                    }
+                }
 
-				public override void SetBlockList()
+                public override void SetBlockList()
 				{
 					
 				}
@@ -1422,12 +1503,15 @@ namespace ABSspace
 				{
 					base.BuildingUpdate();
 
-					// ブロック短縮化
-					if (SToggle.IsActive)
+					if (!StatMaster.isClient)
 					{
-						SToggle.IsActive = false;
-						machine.UndoSystem.Undo();
-						Shorten();
+						// ブロック短縮化
+						if (SToggle.IsActive)
+						{
+							SToggle.IsActive = false;
+							machine.UndoSystem.Undo();
+							Shorten();
+						}
 					}
 				}
 				/// <summary>
@@ -1444,7 +1528,7 @@ namespace ABSspace
 						ChangeBlock((BlockType)BB.BlockID, Quaternion.identity, true);
 					}
 				}
-				public override void ModifyBlockN()
+				public override void ModifyBlockG()
 				{
 					Shorten();
 				}
@@ -1863,7 +1947,14 @@ namespace ABSspace
 				public bool isFirst = true;
 				public GameObject AxisParent;
 				public LineRenderer axis;
-				public float angleFlat = 23.06876f; //水平化するための角度 //短プロペラでは22.845
+				/// <summary>
+				/// 水平化するための角度
+				/// 短プロペラでは22.845
+				/// </summary>
+				public float angleFlat = 23.06876f;
+				/// <summary>
+				/// 端点
+				/// </summary>
 				public Vector3 EndsVector
 				{
 					get
@@ -1874,13 +1965,29 @@ namespace ABSspace
 						}
 						//シミュ中とビルド中のスタブロの角度の差を取り、その差の角度でProtoEndsVectorを回転させる
 						return (StartingBlockSimulation.transform.rotation * Quaternion.Inverse(StartingBlockBuild.transform.rotation)) * component.AxisDrag;
-
-						//return machine.transform.localRotation * ProtoEndsVector;
 					}
 				}
 				protected AxialDrag component;
-				public BlockBehaviour StartingBlockSimulation; //シミュ中のスタブロ
-				public BlockBehaviour StartingBlockBuild; //ビルド中のスタブロ
+				/// <summary>
+				/// シミュ中のスタブロ
+				/// </summary>
+				public BlockBehaviour StartingBlockSimulation;
+				/// <summary>
+				/// ビルド中のスタブロ
+				/// </summary>
+				public BlockBehaviour StartingBlockBuild;
+				/// <summary>
+				/// 現在の位置
+				/// </summary>
+				public Vector3 position = Vector3.zero;
+				/// <summary>
+				/// 1つ前の位置
+				/// </summary>
+				public Vector3 lastPosition = Vector3.zero;
+				/// <summary>
+				/// 速度
+				/// </summary>
+				public Vector3 velocity = Vector3.zero;
 
 				public BlockBehaviour GetStartingBlock() //スタブロを参照するのはちょっと危ないかも？（マルチとか）
 				{
@@ -1932,6 +2039,7 @@ namespace ABSspace
 					{
 						machine = block.Machine.InternalObject;
 					}
+					if (!IsMyMachine) return;
 					//GetCenterはビルド時しか効かないのでは
 					//BB.hogehoge = ローカル
 					axis.enabled = (CoLController.CoLGUI.Instance.ShowLiftVectors);
@@ -1954,13 +2062,16 @@ namespace ABSspace
 						}
 					}
 
-					//短ペラ・ウッドパネル交換系
-					if (PPToggle.IsActive)
+					if (!StatMaster.isClient)
 					{
-						//プロペラとウッドパネルを交換する
-						PPToggle.IsActive = false;
-						machine.UndoSystem.Undo();
-						ChangeBlock(BlockType.WoodenPanel, Quaternion.AngleAxis(90f, Vector3.left));
+						//短ペラ・ウッドパネル交換系
+						if (PPToggle.IsActive)
+						{
+							//プロペラとウッドパネルを交換する
+							PPToggle.IsActive = false;
+							machine.UndoSystem.Undo();
+							ChangeBlock(BlockType.WoodenPanel, Quaternion.AngleAxis(90f, Vector3.left));
+						}
 					}
 				}
                 public override void SimulateFixedUpdateAlways()
@@ -1971,6 +2082,7 @@ namespace ABSspace
 					{
 						machine = block.Machine.InternalObject;
 					}
+					if (!IsMyMachine) return;
 					if (axis == null)
                     {
 						Mod.Error("axis is null");
@@ -1985,6 +2097,18 @@ namespace ABSspace
 							center + 0.1f * (BB.transform.rotation * PropellerForce())
 						});
 					}
+
+					// 速度計測
+					position = transform.position;
+					if (position == null || lastPosition == null)
+                    {
+						velocity = Vector3.zero;
+                    }
+                    else
+                    {
+						velocity = (position - lastPosition) / Time.fixedDeltaTime;
+                    }
+					lastPosition = position;
 				}
 				/// <summary>
 				/// プロペラにかかる揚力（抵抗）を求める
@@ -1992,7 +2116,7 @@ namespace ABSspace
 				/// <returns>プロペラにかかる揚力（抵抗）</returns>
 				public Vector3 PropellerForce()
                 {
-					Vector3 currentVelocity = component.Rigidbody.velocity;
+					Vector3 currentVelocity = velocity; //component.Rigidbody.velocity;
 					Vector3 a = component.upTransform.InverseTransformDirection(currentVelocity);
 					Vector3 xyz = Vector3.Scale(-a, component.AxisDrag);
 					float currentVeclocitySqr = Mathf.Min(currentVelocity.sqrMagnitude, 100 ^ 2);
@@ -2280,13 +2404,16 @@ namespace ABSspace
                 {
                     base.BuildingUpdate();
 
-					// 短ペラ・ウッドパネル交換系
-					if (PPToggle.IsActive)
+					if (!StatMaster.isClient)
 					{
-						//プロペラとウッドパネルを交換する
-						PPToggle.IsActive = false;
-						machine.UndoSystem.Undo();
-						ChangeBlock(BlockType.SmallPropeller, Quaternion.AngleAxis(-90f, Vector3.left));
+						// 短ペラ・ウッドパネル交換系
+						if (PPToggle.IsActive)
+						{
+							//プロペラとウッドパネルを交換する
+							PPToggle.IsActive = false;
+							machine.UndoSystem.Undo();
+							ChangeBlock(BlockType.SmallPropeller, Quaternion.AngleAxis(-90f, Vector3.left));
+						}
 					}
 				}
                 public override void ModifyBlockN()
@@ -3786,14 +3913,17 @@ namespace ABSspace
 			{
 				base.BuildingUpdate();
 
-				if (isModBlock && MExchangeMenu != null && MExchangeToggle != null)
+				if (!StatMaster.isClient)
 				{
-					// →modブロック
-					if (MExchangeToggle.IsActive)
+					if (isModBlock && MExchangeMenu != null && MExchangeToggle != null)
 					{
-						MExchangeToggle.IsActive = false;
-						machine.UndoSystem.Undo();
-						ChangeModBlock(ThisModBlockId.BlockGroup[MExchangeMenu.Value].ModId, ThisModBlockId.BlockGroup[MExchangeMenu.Value].LocalId);
+						// →modブロック
+						if (MExchangeToggle.IsActive)
+						{
+							MExchangeToggle.IsActive = false;
+							machine.UndoSystem.Undo();
+							ChangeModBlock(ThisModBlockId.BlockGroup[MExchangeMenu.Value].ModId, ThisModBlockId.BlockGroup[MExchangeMenu.Value].LocalId);
+						}
 					}
 				}
 			}

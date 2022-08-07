@@ -9,7 +9,7 @@
 	<Name>Aircraft Build Support</Name>
 	<Author>yamabach</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>2.0.0</Version>
+	<Version>2.1.0</Version>
 	
 	<Description>
 Add some useful features for aircraft lovers <!-- FIX: Insert a short description here. -->
@@ -84,6 +84,7 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
 	
 	<!-- Any blocks your mod adds to the game.
 		 The path attribute is relative to the location of this file. -->
+	<!--
 	<Blocks>
 		<Block path="ReversedSingleWoodenBlock.xml" />
 		<Block path="ReversedDoubleWoodenBlock.xml" />
@@ -97,6 +98,7 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
 		<Block path="ReversedBallJoint.xml" />
 		<Block path="ReversedGrabber.xml" />
 	</Blocks>
+	-->
 	
 	<!-- Any entities (level objects) your mod adds to the game.
 		 The path attribute is relative to the location of this file. -->
@@ -132,6 +134,7 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
     <Texture name="PngProjectorTex" path="PngProjectorEntity\PngProjectorThumbnail.png"/>
     
     <!--リバースブロック-->
+	<!--
 	<Mesh name="grabberMesh" path="VanillaBlocks\Grabber\grabber.obj"/>
 	<Texture name="grabberTex" path="VanillaBlocks\Grabber\grabbertex_png.png"/>
     
@@ -167,6 +170,7 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
     
     <Mesh name="uCogMesh" path="VanillaBlocks\CogMediumUnpowered\cogunpowered.obj"/>
     <Texture name="uCogTex" path="VanillaBlocks\CogMediumUnpowered\cogunpoweredtex_png.png"/>
+	-->
     
     <!--Png投影機-->
     <Mesh name="PngProjectorEntityMesh" path="PngProjectorEntity\PngProjectorEntityMesh.obj"/>
