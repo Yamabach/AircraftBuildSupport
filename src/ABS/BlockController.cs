@@ -986,9 +986,9 @@ namespace ABSspace
 				{
 					ModifyBlockN();
 				}
-				if (Input.GetKeyDown(KeyCode.R) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.V) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlockR();
+					ModifyBlockV();
 				}
 			}
 
@@ -1020,7 +1020,7 @@ namespace ABSspace
 			/// <summary>
 			/// Rキーが押された時に呼び出す
 			/// </summary>
-			public virtual void ModifyBlockR() { }
+			public virtual void ModifyBlockV() { }
 
 			public AbstractBlockScript()
 			{
@@ -1386,7 +1386,7 @@ namespace ABSspace
 			/// <summary>
 			/// ブロック反転
 			/// </summary>
-            public override void ModifyBlockR()
+            public override void ModifyBlockV()
             {
 				Vector3 lastPos = transform.localPosition;
 				Quaternion lastRot = transform.localRotation;
