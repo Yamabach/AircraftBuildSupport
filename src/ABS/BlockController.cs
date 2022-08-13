@@ -962,21 +962,21 @@ namespace ABSspace
 			}
 			public virtual void OnMouseOver()
 			{
-				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu && !Input.GetKey(KeyCode.LeftAlt))
 				{
 					ModifyBlockG();
 				}
-				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu && !Input.GetKey(KeyCode.LeftAlt))
 				{
 					ModifyBlockT();
 				}
-				if (Input.GetKeyDown(KeyCode.H) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu && Input.GetKey(KeyCode.LeftAlt))
 				{
-					ModifyBlockH();
+					ModifyBlockAltG();
 				}
-				if (Input.GetKeyDown(KeyCode.Y) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu && Input.GetKey(KeyCode.LeftAlt))
 				{
-					ModifyBlockY();
+					ModifyBlockAltT();
 				}
 				if (Input.GetKeyDown(KeyCode.B) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
@@ -986,9 +986,9 @@ namespace ABSspace
 				{
 					ModifyBlockN();
 				}
-				if (Input.GetKeyDown(KeyCode.V) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (Input.GetKeyDown(KeyCode.Y) && !Game.IsSimulating && !StatMaster.isMainMenu)
 				{
-					ModifyBlockV();
+					ModifyBlockY();
 				}
 			}
 
@@ -1002,13 +1002,13 @@ namespace ABSspace
 			/// </summary>
 			public virtual void ModifyBlockT() { }
 			/// <summary>
-			/// Hキーが押された時に呼び出す
+			/// Alt+Gキーが押された時に呼び出す
 			/// </summary>
-			public virtual void ModifyBlockH() { }
+			public virtual void ModifyBlockAltG() { }
 			/// <summary>
-			/// Yキーが押された時に呼び出す
+			/// Alt+Tキーが押された時に呼び出す
 			/// </summary>
-			public virtual void ModifyBlockY() { }
+			public virtual void ModifyBlockAltT() { }
 			/// <summary>
 			/// Bキーが押された時に呼び出す
 			/// </summary>
@@ -1018,9 +1018,9 @@ namespace ABSspace
 			/// </summary>
 			public virtual void ModifyBlockN() { }
 			/// <summary>
-			/// Rキーが押された時に呼び出す
+			/// Yキーが押された時に呼び出す
 			/// </summary>
-			public virtual void ModifyBlockV() { }
+			public virtual void ModifyBlockY() { }
 
 			public AbstractBlockScript()
 			{
@@ -1386,7 +1386,7 @@ namespace ABSspace
 			/// <summary>
 			/// ブロック反転
 			/// </summary>
-            public override void ModifyBlockV()
+            public override void ModifyBlockY()
             {
 				Vector3 lastPos = transform.localPosition;
 				Quaternion lastRot = transform.localRotation;
@@ -2143,14 +2143,14 @@ namespace ABSspace
 				/// <summary>
 				/// 謎加速角度化
 				/// </summary>
-				public override void ModifyBlockH()
+				public override void ModifyBlockAltG()
 				{
 					Rotate(false, false);
 				}
 				/// <summary>
 				/// 謎加速角度化の逆
 				/// </summary>
-				public override void ModifyBlockY()
+				public override void ModifyBlockAltT()
 				{
 					Rotate(false, true);
 				}
