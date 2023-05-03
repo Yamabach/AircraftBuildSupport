@@ -28,13 +28,7 @@ namespace ABSspace
 		/// </summary>
 		public class BlockSelector : SingleInstance<BlockSelector>
 		{
-			public override string Name
-            {
-                get
-                {
-					return "Block Selector";
-                }
-            }
+			public override string Name => "Block Selector";
 			internal PlayerMachineInfo PMI { get; set; }
 			/// <summary>
 			/// バニラブロックとそれに割り当てるコンポーネントの組
@@ -86,6 +80,14 @@ namespace ABSspace
 					(int)BlockType.ScalingBlock,
 					typeof(ScalingBlockScript)
 				},
+                {
+					(int)BlockType.Axle,
+					typeof(UniversalJointScript)
+                },
+                {
+					(int)BlockType.MetalJaw,
+					typeof(MetalJawScript)
+                },
 
 				//ホイール系
 				{
@@ -223,6 +225,11 @@ namespace ABSspace
                 },
                 {
 					(int)BlockType.SqrBalloon, typeof(SqrBalloonScript)
+                },
+
+                // 距離計
+                {
+					(int)BlockType.RopeMeasure, typeof(LengthDetectorScript)
                 },
 			//武装なんかも追加したい（ACM製ブロックを含む）
 			};
@@ -1610,76 +1617,53 @@ namespace ABSspace
 			{
 				public override void SetBlockList()
 				{
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.BallJoint,
+							BlockType.Hinge,
+							BlockType.SteeringHinge,
+							BlockType.Axle,
+							BlockType.MetalJaw,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Ball Joint",
+							"Hinge",
+							"Steering Hinge",
+							"Universal Joint",
+							"Metal Jaw",
+						};
 					if (Mod.Extended)
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.BallJoint,
-							BlockType.Hinge,
-							BlockType.SteeringHinge,
-							BlockType.ScalingBlock,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Ball Joint",
-							"Hinge",
-							"Steering Hinge",
-							"Scaling Block",
-						};
-					}
-					else
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.BallJoint,
-							BlockType.Hinge,
-							BlockType.SteeringHinge,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Ball Joint",
-							"Hinge",
-							"Steering Hinge",
-						};
-					}
+                    {
+						ExchangeList.Insert(3, BlockType.ScalingBlock);
+						ExchangeListMenu.Insert(3, "Scaling Block");
+                    }
 				}
 			}
 			public class BallJointScript : BlockExchangerScript
 			{
 				public override void SetBlockList()
 				{
-					
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.Hinge,
+							BlockType.SteeringHinge,
+							BlockType.Axle,
+							BlockType.MetalJaw,
+							BlockType.Swivel,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Hinge",
+							"Steering Hinge",
+							"Universal Joint",
+							"Metal Jaw",
+							"Swivel",
+						};
 					if (Mod.Extended)
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.Hinge,
-							BlockType.SteeringHinge,
-							BlockType.ScalingBlock,
-							BlockType.Swivel,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Hinge",
-							"Steering Hinge",
-							"Scaling Block",
-							"Swivel",
-						};
-					}
-					else
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.Hinge,
-							BlockType.SteeringHinge,
-							BlockType.Swivel,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Hinge",
-							"Steering Hinge",
-							"Swivel",
-						};
+                    {
+						ExchangeList.Insert(2, BlockType.ScalingBlock);
+						ExchangeListMenu.Insert(2, "Scaling Block");
 					}
 				}
 			}
@@ -1687,38 +1671,28 @@ namespace ABSspace
 			{
 				public override void SetBlockList()
 				{
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.SteeringHinge,
+							BlockType.Axle,
+							BlockType.MetalJaw,
+							BlockType.Swivel,
+							BlockType.BallJoint,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Steering Hinge",
+							"Universal Joint",
+							"Metal Jaw",
+							"Swivel",
+							"Ball Joint",
+						};
 					if (Mod.Extended)
 					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.SteeringHinge,
-							BlockType.ScalingBlock,
-							BlockType.Swivel,
-							BlockType.BallJoint,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Steering Hinge",
-							"Scaling Block",
-							"Swivel",
-							"Ball Joint",
-						};
+						ExchangeList.Insert(1, BlockType.ScalingBlock);
+						ExchangeListMenu.Insert(1, "Scaling Block");
 					}
-					else
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.SteeringHinge,
-							BlockType.Swivel,
-							BlockType.BallJoint,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Steering Hinge",
-							"Swivel",
-							"Ball Joint",
-						};
-					}
+
 				}
 
 			}
@@ -1726,37 +1700,26 @@ namespace ABSspace
 			{
 				public override void SetBlockList()
 				{
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.Axle,
+							BlockType.MetalJaw,
+							BlockType.Swivel,
+							BlockType.BallJoint,
+							BlockType.Hinge,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Universal Joint",
+							"Metal Jaw",
+							"Swivel",
+							"BallJoint",
+							"Hinge",
+						};
 					if (Mod.Extended)
 					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.ScalingBlock,
-							BlockType.Swivel,
-							BlockType.BallJoint,
-							BlockType.Hinge,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Scaling Block",
-							"Swivel",
-							"BallJoint",
-							"Hinge",
-						};
-					}
-					else
-					{
-						ExchangeList = new List<BlockType>
-						{
-							BlockType.Swivel,
-							BlockType.BallJoint,
-							BlockType.Hinge,
-						};
-						ExchangeListMenu = new List<string>
-						{
-							"Swivel",
-							"BallJoint",
-							"Hinge",
-						};
+						ExchangeList.Insert(0, BlockType.ScalingBlock);
+						ExchangeListMenu.Insert(0, "Scaling Block");
 					}
 				}
 			}
@@ -1766,6 +1729,8 @@ namespace ABSspace
 				{
 					ExchangeList = new List<BlockType>
 					{
+						BlockType.Axle,
+						BlockType.MetalJaw,
 						BlockType.Swivel,
 						BlockType.BallJoint,
 						BlockType.Hinge,
@@ -1773,11 +1738,67 @@ namespace ABSspace
 					};
 					ExchangeListMenu = new List<string>
 					{
+						"Universal Joint",
+						"Metal Jaw",
 						"Swivel",
 						"BallJoint",
 						"Hinge",
 						"Steering Hinge",
 					};
+				}
+			}
+			public class UniversalJointScript : BlockExchangerScript
+			{
+				public override void SetBlockList()
+				{
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.MetalJaw,
+							BlockType.Swivel,
+							BlockType.BallJoint,
+							BlockType.Hinge,
+							BlockType.SteeringHinge,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Metal Jaw",
+							"Swivel",
+							"BallJoint",
+							"Hinge",
+							"Steering Hinge",
+						};
+					if (Mod.Extended)
+					{
+						ExchangeList.Add(BlockType.ScalingBlock);
+						ExchangeListMenu.Add("Scaling Block");
+					}
+				}
+			}
+			public class MetalJawScript : BlockExchangerScript
+			{
+				public override void SetBlockList()
+				{
+					ExchangeList = new List<BlockType>
+						{
+							BlockType.Swivel,
+							BlockType.BallJoint,
+							BlockType.Hinge,
+							BlockType.SteeringHinge,
+							BlockType.Axle,
+						};
+					ExchangeListMenu = new List<string>
+						{
+							"Swivel",
+							"BallJoint",
+							"Hinge",
+							"Steering Hinge",
+							"Universal Joint",
+						};
+					if (Mod.Extended)
+					{
+						ExchangeList.Insert(4, BlockType.ScalingBlock);
+						ExchangeListMenu.Insert(4, "Scaling Block");
+					}
 				}
 			}
 			public class MotorWheelScript : BlockExchangerScript
@@ -2795,6 +2816,67 @@ namespace ABSspace
 					};
 				}
 			}
+			public class LengthDetectorScript : BlockExchangerScript
+            {
+				public override void SetBlockList()
+				{
+					ExchangeList = new List<BlockType>
+					{
+
+					};
+					ExchangeListMenu = new List<string>
+					{
+
+					};
+				}
+				private RopeMeasure _measure;
+				/// <summary>
+				/// %で検知距離を設定するかどうか
+				/// </summary>
+				private MToggle _adjustByPercentage;
+				/// <summary>
+				/// 検知距離（%）
+				/// </summary>
+				private MSlider _lengthPercentage;
+				/// <summary>
+				/// 始点から終点までの距離
+				/// </summary>
+				public float length
+                {
+                    get
+                    {
+						float sqrLength = (_measure.endBody.position - _measure.startBody.position).sqrMagnitude;
+						return Mathf.Sqrt(sqrLength);
+                    }
+                }
+				public float percent => _measure.LengthSlider.Value / length * 100f;
+
+                public override void SafeAwake()
+                {
+                    base.SafeAwake();
+					_measure = GetComponent<RopeMeasure>();
+					_adjustByPercentage = BB.AddToggle(Mod.isJapanese ? "%で調整" : "Adjust By %", "adjust-by-percentage", false);
+					_lengthPercentage = BB.AddSliderUnclamped(Mod.isJapanese ? "距離（%）" : "Length %", "length-percentage", 100f, 0f, 200f);
+
+					// トグルで出し入れする
+					_adjustByPercentage.Toggled += (value) =>
+					{
+						_measure.LengthSlider.DisplayInMapper = !value;
+						_lengthPercentage.DisplayInMapper = value;
+						_lengthPercentage.Value = percent;
+						//Mod.Log($"toggled to {value}, length={length}");
+					};
+					_lengthPercentage.ValueChanged += (value) =>
+					{
+						if (length <= 0f) return;
+						_measure.LengthSlider.Value = value * length / 100f;
+						//Mod.Log($"changed to {value}, length={length}");
+					};
+
+					_measure.LengthSlider.DisplayInMapper = !_adjustByPercentage.IsActive;
+					_lengthPercentage.DisplayInMapper = _adjustByPercentage.IsActive;
+                }
+            }
 			public class OtherBlockScript : BlockExchangerScript
 			{
                 public override void SetBlockList()
