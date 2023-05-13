@@ -2816,6 +2816,9 @@ namespace ABSspace
 					};
 				}
 			}
+			/// <summary>
+			/// 距離計のスクリプト
+			/// </summary>
 			public class LengthDetectorScript : BlockExchangerScript
             {
 				public override void SetBlockList()
@@ -2863,13 +2866,20 @@ namespace ABSspace
 					{
 						_measure.LengthSlider.DisplayInMapper = !value;
 						_lengthPercentage.DisplayInMapper = value;
-						_lengthPercentage.Value = percent;
+						//_lengthPercentage.Value = percent;
 						//Mod.Log($"toggled to {value}, length={length}");
+					};
+					_measure.LengthSlider.ValueChanged += (value) =>
+					{
+						if (length <= 0f) return;
+
+						_lengthPercentage.SetValue(percent);
 					};
 					_lengthPercentage.ValueChanged += (value) =>
 					{
 						if (length <= 0f) return;
-						_measure.LengthSlider.Value = value * length / 100f;
+
+						_measure.LengthSlider.Value = (value * length / 100f);
 						//Mod.Log($"changed to {value}, length={length}");
 					};
 
