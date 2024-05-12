@@ -12,7 +12,6 @@ C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Aircraft
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\RakNetSwig.dll
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\mcs.dll
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\NATTraversalForUNET.dll
-C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.CopyComplete
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.dll
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.pdb
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\ch.sycoforge.Decal.dll
@@ -72,3 +71,4 @@ D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport\src\ABS
 D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport\src\ABS\obj\Debug\ABS.dll
 D:\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport\src\ABS\obj\Debug\ABS.pdb
 C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\bin\Debug\UnityEngine.xml
+C:\Program Files (x86)\Steam\steamapps\common\Besiege\Besiege_Data\Mods\AircraftBuildSupport Project\src\ABS\obj\Debug\ABS.csproj.Up2Date

@@ -801,6 +801,15 @@ namespace ABSspace
 
 				}
 				DisplayInMapper(CombatUtilities);
+
+				// mod keys
+				MKeyG = ModKeys.GetKey("block-effect-g");
+				MKeyT = ModKeys.GetKey("block-effect-t");
+				MKeyAltG = ModKeys.GetKey("block-effect-g-inv");
+				MKeyAltT = ModKeys.GetKey("block-effect-t-inv");
+				MKeyB = ModKeys.GetKey("exchange-block");
+				MKeyN = ModKeys.GetKey("exchange-prop-panel");
+				MKeyY = ModKeys.GetKey("reverse-block");
 			}
 			private void Start()
             {
@@ -840,6 +849,14 @@ namespace ABSspace
 					if (CombatUtilities)
 					{
 						BuildingUpdate();
+						//if (BB.IsSelected)
+                        //{
+							//Mod.Log($"selected");
+                        //}
+						//if (BB.IsSelectedExtra)
+                        //{
+							//Mod.Log($"selected extra");
+                        //}
 					}
 					isFirstFrame = true;
 				}
@@ -969,37 +986,46 @@ namespace ABSspace
 			}
 			public virtual void OnMouseOver()
 			{
-				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu && !Input.GetKey(KeyCode.LeftAlt))
+				if (Game.IsSimulating || StatMaster.isMainMenu) return;
+
+				if (MKeyG.IsPressed && !MKeyAltG.IsDown)
 				{
 					ModifyBlockG();
 				}
-				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu && !Input.GetKey(KeyCode.LeftAlt))
+				if (MKeyT.IsPressed && !MKeyAltT.IsDown)
 				{
 					ModifyBlockT();
 				}
-				if (Input.GetKeyDown(KeyCode.G) && !Game.IsSimulating && !StatMaster.isMainMenu && Input.GetKey(KeyCode.LeftAlt))
+				if (MKeyAltG.IsPressed)
 				{
 					ModifyBlockAltG();
 				}
-				if (Input.GetKeyDown(KeyCode.T) && !Game.IsSimulating && !StatMaster.isMainMenu && Input.GetKey(KeyCode.LeftAlt))
+				if (MKeyAltT.IsPressed)
 				{
 					ModifyBlockAltT();
 				}
-				if (Input.GetKeyDown(KeyCode.B) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (MKeyB.IsPressed)
 				{
 					ModifyBlockB();
 				}
-				if (Input.GetKeyDown(KeyCode.N) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (MKeyN.IsPressed)
 				{
 					ModifyBlockN();
 				}
-				if (Input.GetKeyDown(KeyCode.Y) && !Game.IsSimulating && !StatMaster.isMainMenu)
+				if (MKeyY.IsPressed)
 				{
 					ModifyBlockY();
 				}
 			}
 
 			//ショートカット系
+			public ModKey MKeyG;
+			public ModKey MKeyT;
+			public ModKey MKeyAltG;
+			public ModKey MKeyAltT;
+			public ModKey MKeyB;
+			public ModKey MKeyN;
+			public ModKey MKeyY;
 			/// <summary>
 			/// Gキーが押された時に呼び出す
 			/// </summary>
@@ -2879,7 +2905,14 @@ namespace ABSspace
 					{
 						if (length <= 0f) return;
 
-						_measure.LengthSlider.Value = (value * length / 100f);
+						// 現在adjust by percentageの設定でないなら値を更新しない
+						if (!_adjustByPercentage.IsActive)
+						{
+							return;
+						}
+
+						//_measure.LengthSlider.Value = (value * length / 100f);
+						_measure.LengthSlider.SetValue((value * length / 100f));
 						//Mod.Log($"changed to {value}, length={length}");
 					};
 

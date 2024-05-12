@@ -188,6 +188,14 @@ namespace ABSspace
 			/// シミュ中にUIを消すかどうか
 			/// </summary>
 			public bool DisappearInSim = false;
+			/// <summary>
+			/// canDragのショートカット
+			/// </summary>
+			public ModKey ModKeyCanDrag;
+			/// <summary>
+			/// DisappearInSimのショートカット
+			/// </summary>
+			public ModKey ModKeyDisappearInSim;
 
 			/// <summary>
 			/// プロペラの空力表示を行うかどうか
@@ -208,6 +216,10 @@ namespace ABSspace
 
 				isJapanese = Mod.isJapanese;
 				windowId = ModUtility.GetWindowId();
+
+				// mod key
+				ModKeyCanDrag = ModKeys.GetKey("ui-dragging");
+				ModKeyDisappearInSim = ModKeys.GetKey("ui-disappear-in-sim");
 			}
 			public void Start()
             {
@@ -241,6 +253,16 @@ namespace ABSspace
                     {
 						AngularVelocityCurrentUnit = 0;
                     }
+                }
+
+				// コマンドのショートカット
+				if (ModKeyCanDrag.IsPressed)
+                {
+					canDrag = !canDrag;
+                }
+				if (ModKeyDisappearInSim.IsPressed)
+                {
+					DisappearInSim = !DisappearInSim;
                 }
 			}
 			public void FixedUpdate()

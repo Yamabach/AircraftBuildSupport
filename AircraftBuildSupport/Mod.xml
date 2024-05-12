@@ -9,7 +9,7 @@
 	<Name>Aircraft Build Support</Name>
 	<Author>yamabach</Author> <!-- FIX: Insert your name here. -->
 	<!-- Major.Minor.Build -->
-	<Version>2.2.0</Version>
+	<Version>2.3.0</Version>
 	
 	<Description>
 Add some useful features for aircraft lovers <!-- FIX: Insert a short description here. -->
@@ -81,6 +81,18 @@ Add some useful features for aircraft lovers <!-- FIX: Insert a short descriptio
 	<Assemblies>
 		<Assembly path="ABS.dll" />
 	</Assemblies>
+
+	<Keys>
+		<Key name="block-effect-g" defaultModifier="None" defaultTrigger="G" />
+		<Key name="block-effect-t" defaultModifier="None" defaultTrigger="T" />
+		<Key name="block-effect-g-inv" defaultModifier="LeftAlt" defaultTrigger="G" />
+		<Key name="block-effect-t-inv" defaultModifier="LeftAlt" defaultTrigger="T" />
+		<Key name="exchange-block" defaultModifier="None" defaultTrigger="B" />
+		<Key name="exchange-prop-panel" defaultModifier="None" defaultTrigger="N" />
+		<Key name="reverse-block" defaultModifier="None" defaultTrigger="Y" />
+		<Key name="ui-dragging" defaultModifier="LeftAlt" defaultTrigger="O" />
+		<Key name="ui-disappear-in-sim" defaultModifier="LeftAlt" defaultTrigger="L" />
+	</Keys>
 	
 	<!-- Any blocks your mod adds to the game.
 		 The path attribute is relative to the location of this file. -->
